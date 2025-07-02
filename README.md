@@ -1,73 +1,125 @@
-# Welcome to your Lovable project
 
-## Project info
+# AcademeSpace - Educational Social Platform
 
-**URL**: https://lovable.dev/projects/4e8d38f6-451a-40a7-bec7-3b6dfe0083a2
+Welcome to AcademeSpace, the ultimate social platform designed specifically for students and educators to connect, collaborate, and grow together.
 
-## How can I edit this code?
+## About AcademeSpace
 
-There are several ways of editing your application.
+AcademeSpace is a vibrant community where students from around the world come together to share knowledge, form study groups, and support each other's academic journey. Whether you're looking to connect with classmates, find study partners, or showcase your academic achievements, AcademeSpace provides the perfect environment for educational networking.
 
-**Use Lovable**
+## Features
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/4e8d38f6-451a-40a7-bec7-3b6dfe0083a2) and start prompting.
+- **Profile Management**: Create detailed academic profiles showcasing your achievements, skills, and academic journey
+- **Study Groups**: Join or create study groups for specific subjects and courses
+- **Achievement Tracking**: Display your academic accomplishments, awards, and certifications
+- **Activity Feed**: Stay updated with your network's academic activities and milestones
+- **Dark/Light Mode**: Comfortable viewing experience with theme switching
+- **Responsive Design**: Seamless experience across all devices
 
-Changes made via Lovable will be committed automatically to this repo.
+## Getting Started
 
-**Use your preferred IDE**
+### Prerequisites
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+Make sure you have Node.js installed on your system. We recommend using the latest LTS version.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Installation
 
-Follow these steps:
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd academe-space
+```
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+2. Install dependencies:
+```bash
+npm install
+```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+3. Start the development server:
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+4. Open your browser and navigate to `http://localhost:5173`
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Technology Stack
 
-**Use GitHub Codespaces**
+AcademeSpace is built using modern web technologies:
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+- **React 18** - Modern UI library for building interactive user interfaces
+- **TypeScript** - Type-safe JavaScript for better development experience
+- **Vite** - Fast build tool and development server
+- **Tailwind CSS** - Utility-first CSS framework for rapid UI development
+- **Shadcn/UI** - Beautiful and accessible component library
+- **React Router** - Client-side routing for seamless navigation
+- **Tanstack Query** - Powerful data synchronization for React
 
-## What technologies are used for this project?
+## Project Structure
 
-This project is built with:
+```
+src/
+├── components/          # Reusable UI components
+│   ├── Layout/         # Layout components
+│   ├── Profile/        # Profile-related components
+│   ├── Navigation/     # Navigation components
+│   └── ui/             # Base UI components
+├── contexts/           # React contexts for state management
+├── hooks/              # Custom React hooks
+├── pages/              # Page components
+└── lib/                # Utility functions and configurations
+```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Contributing
 
-## How can I deploy this project?
+We welcome contributions from the community! Whether it's bug fixes, feature enhancements, or documentation improvements, your contributions help make AcademeSpace better for everyone.
 
-Simply open [Lovable](https://lovable.dev/projects/4e8d38f6-451a-40a7-bec7-3b6dfe0083a2) and click on Share -> Publish.
+### How to Contribute
 
-## Can I connect a custom domain to my Lovable project?
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-Yes, you can!
+## Development Guidelines
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+- Follow the existing code style and conventions
+- Write meaningful commit messages
+- Test your changes thoroughly before submitting
+- Update documentation when necessary
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+## Community
+
+Join our growing community of students and educators:
+
+- **Discord**: Join our community discussions
+- **GitHub Issues**: Report bugs or request features
+- **Email**: contact@academespace.com
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Support
+
+If you encounter any issues or have questions about AcademeSpace, please:
+
+1. Check the existing GitHub issues
+2. Create a new issue with detailed information
+3. Reach out to our community on Discord
+
+## Roadmap
+
+We're constantly working to improve AcademeSpace. Here's what's coming next:
+
+- Mobile app for iOS and Android
+- Real-time messaging and chat features
+- Advanced study group management tools
+- Integration with popular learning management systems
+- AI-powered study recommendations
+
+---
+
+**Built with ❤️ by students, for students.**
+
+*Empowering academic collaboration and growth through technology.*
