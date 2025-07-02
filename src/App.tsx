@@ -8,6 +8,7 @@ import { ProfileProvider } from "./contexts/ProfileContext";
 import Index from "./pages/Index";
 import Profile from "./pages/Profile";
 import StudyGroups from "./pages/StudyGroups";
+import Messages from "./pages/Messages";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,6 +24,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/study-groups" element={<StudyGroups />} />
+            <Route path="/messages" element={<Messages />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
