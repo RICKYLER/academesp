@@ -4,8 +4,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
+import { Switch } from '../ui/switch';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
-import { Settings, Camera, Save, X } from 'lucide-react';
+import { Settings, Camera, Save, X, Moon, Sun, Bell, Eye, Globe } from 'lucide-react';
+import { useTheme } from '../../contexts/ThemeContext';
 
 interface ProfileEditDialogProps {
   currentName: string;
@@ -22,6 +24,11 @@ const ProfileEditDialog: React.FC<ProfileEditDialogProps> = ({
   const [name, setName] = useState(currentName);
   const [imageUrl, setImageUrl] = useState(currentImage);
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [notifications, setNotifications] = useState(true);
+  const [publicProfile, setPublicProfile] = useState(true);
+  const [onlineStatus, setOnlineStatus] = useState(true);
+  
+  const { theme, toggleTheme } = useTheme();
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -55,11 +62,11 @@ const ProfileEditDialog: React.FC<ProfileEditDialogProps> = ({
           <span>Edit Profile</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center space-x-2">
             <Settings className="w-5 h-5" />
-            <span>Profile Settings</span>
+            <span>Profile & Settings</span>
           </DialogTitle>
         </DialogHeader>
         
@@ -104,8 +111,87 @@ const ProfileEditDialog: React.FC<ProfileEditDialogProps> = ({
             />
           </div>
 
+          {/* Settings Section */}
+          <div className="space-y-4 border-t pt-4">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+              Preferences
+            </h3>
+
+            {/* Dark Mode Toggle */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                {theme === 'dark' ? (
+                  <Moon className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                ) : (
+                  <Sun className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                )}
+                <div>
+                  <Label className="text-sm font-medium">Dark Mode</Label>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    Toggle between light and dark theme
+                  </p>
+                </div>
+              </div>
+              <Switch
+                checked={theme === 'dark'}
+                onCheckedChange={toggleTheme}
+              />
+            </div>
+
+            {/* Notifications Toggle */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <Bell className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                <div>
+                  <Label className="text-sm font-medium">Notifications</Label>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    Receive notifications about activities
+                  </p>
+                </div>
+              </div>
+              <Switch
+                checked={notifications}
+                onCheckedChange={setNotifications}
+              />
+            </div>
+
+            {/* Public Profile Toggle */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <Globe className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                <div>
+                  <Label className="text-sm font-medium">Public Profile</Label>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    Make your profile visible to everyone
+                  </p>
+                </div>
+              </div>
+              <Switch
+                checked={publicProfile}
+                onCheckedChange={setPublicProfile}
+              />
+            </div>
+
+            {/* Online Status Toggle */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <Eye className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                <div>
+                  <Label className="text-sm font-medium">Show Online Status</Label>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    Let others see when you're online
+                  </p>
+                </div>
+              </div>
+              <Switch
+                checked={onlineStatus}
+                onCheckedChange={setOnlineStatus}
+              />
+            </div>
+          </div>
+
           {/* Action Buttons */}
-          <div className="flex space-x-2 pt-4">
+          <div className="flex space-x-2 pt-4 border-t">
             <Button onClick={handleSave} className="flex-1 flex items-center space-x-2">
               <Save className="w-4 h-4" />
               <span>Save Changes</span>
