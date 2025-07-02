@@ -6,7 +6,7 @@ import { Edit } from 'lucide-react';
 const AboutSection: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [about, setAbout] = useState(
-    "Passionate computer science student at MIT with a focus on artificial intelligence and machine learning. I love collaborating on innovative projects and helping fellow students succeed in their academic journey. Always excited to learn new technologies and contribute to open-source projects."
+    "I'm a passionate computer science student at Stanford University with a deep interest in machine learning and software engineering. I love collaborating with fellow students on challenging projects and helping others navigate their academic journey. When I'm not coding, you can find me hiking in the Bay Area or exploring new coffee shops around campus."
   );
 
   return (

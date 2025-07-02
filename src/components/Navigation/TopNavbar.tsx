@@ -15,7 +15,7 @@ const TopNavbar: React.FC = () => {
         {/* Logo */}
         <div className="flex items-center space-x-4">
           <Link to="/" className="text-2xl font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors">
-            AcademeSpace
+            StudyConnect
           </Link>
         </div>
 

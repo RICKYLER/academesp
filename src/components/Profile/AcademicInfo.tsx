@@ -6,23 +6,23 @@ import { GraduationCap, BookOpen, Calendar, Award } from 'lucide-react';
 const AcademicInfo: React.FC = () => {
   const academicData = [
     {
-      institution: "Massachusetts Institute of Technology",
+      institution: "Stanford University",
       degree: "Bachelor of Science in Computer Science",
-      period: "2021 - 2025",
-      gpa: "3.8/4.0",
+      period: "2022 - 2026",
+      gpa: "3.9/4.0",
       status: "Current"
     },
     {
-      institution: "Lincoln High School",
-      degree: "High School Diploma",
-      period: "2017 - 2021",
+      institution: "Westfield High School",
+      degree: "High School Diploma - Summa Cum Laude",
+      period: "2018 - 2022",
       gpa: "4.0/4.0",
       status: "Graduated"
     }
   ];
 
   const courses = [
-    "Introduction to Algorithms",
+    "Data Structures & Algorithms",
     "Machine Learning",
     "Database Systems",
     "Software Engineering",

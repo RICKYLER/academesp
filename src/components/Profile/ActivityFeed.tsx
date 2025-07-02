@@ -8,34 +8,34 @@ const ActivityFeed: React.FC = () => {
     {
       type: 'study_group',
       title: 'Joined "Advanced Algorithms Study Group"',
-      time: '2 hours ago',
+      time: '3 hours ago',
       icon: Users,
       color: 'text-blue-500'
     },
     {
       type: 'achievement',
-      title: 'Completed Machine Learning Course',
+      title: 'Completed Machine Learning Specialization',
       time: '1 day ago',
       icon: BookOpen,
       color: 'text-green-500'
     },
     {
       type: 'post',
-      title: 'Shared notes on Database Systems',
+      title: 'Shared notes on Database Design Principles',
       time: '2 days ago',
       icon: MessageCircle,
       color: 'text-purple-500'
     },
     {
       type: 'like',
-      title: 'Liked Sarah\'s post about React hooks',
+      title: 'Liked Emma\'s post about React best practices',
       time: '3 days ago',
       icon: Heart,
       color: 'text-red-500'
     },
     {
       type: 'study_group',
-      title: 'Created "JavaScript Fundamentals" study group',
+      title: 'Created "Python for Data Science" study group',
       time: '1 week ago',
       icon: Users,
       color: 'text-blue-500'

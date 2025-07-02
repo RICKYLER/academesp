@@ -7,28 +7,28 @@ const AchievementsSection: React.FC = () => {
   const achievements = [
     {
       title: 'Dean\'s List',
-      description: 'Achieved for 3 consecutive semesters',
+      description: 'Achieved for 4 consecutive semesters',
       icon: Trophy,
       color: 'text-yellow-500',
       bgColor: 'bg-yellow-50 dark:bg-yellow-900/20'
     },
     {
       title: 'Hackathon Winner',
-      description: 'MIT Innovation Challenge 2024',
+      description: 'Stanford TreeHacks 2024 Grand Prize',
       icon: Star,
       color: 'text-blue-500',
       bgColor: 'bg-blue-50 dark:bg-blue-900/20'
     },
     {
-      title: 'Research Assistant',
-      description: 'AI Lab Research Program',
+      title: 'Research Publication',
+      description: 'Co-authored paper on Neural Networks',
       icon: Medal,
       color: 'text-purple-500',
       bgColor: 'bg-purple-50 dark:bg-purple-900/20'
     },
     {
-      title: 'Study Group Leader',
-      description: 'Led 5+ successful study groups',
+      title: 'Peer Tutor Award',
+      description: 'Outstanding contributions to student success',
       icon: Award,
       color: 'text-green-500',
       bgColor: 'bg-green-50 dark:bg-green-900/20'

@@ -23,7 +23,7 @@ const ProfileHeader: React.FC = () => {
               <Avatar className="w-32 h-32 border-4 border-white dark:border-gray-800">
                 <AvatarImage src="/placeholder.svg" alt="Profile" />
                 <AvatarFallback className="text-2xl bg-gradient-to-r from-blue-400 to-purple-500 text-white">
-                  JS
+                  AS
                 </AvatarFallback>
               </Avatar>
               <button className="absolute bottom-2 right-2 bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full transition-colors">
@@ -36,7 +36,7 @@ const ProfileHeader: React.FC = () => {
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                    John Student
+                    Alex Thompson
                   </h1>
                   <p className="text-lg text-gray-600 dark:text-gray-300">
                     Computer Science Student
@@ -50,15 +50,15 @@ const ProfileHeader: React.FC = () => {
               {/* Stats */}
               <div className="flex space-x-6 mt-4">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-gray-900 dark:text-white">128</div>
+                  <div className="text-2xl font-bold text-gray-900 dark:text-white">247</div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">Connections</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-gray-900 dark:text-white">2.4k</div>
+                  <div className="text-2xl font-bold text-gray-900 dark:text-white">3.2k</div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">Study Points</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-gray-900 dark:text-white">15</div>
+                  <div className="text-2xl font-bold text-gray-900 dark:text-white">18</div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">Achievements</div>
                 </div>
               </div>
@@ -67,15 +67,15 @@ const ProfileHeader: React.FC = () => {
               <div className="flex flex-wrap gap-4 mt-4 text-sm text-gray-600 dark:text-gray-400">
                 <div className="flex items-center space-x-1">
                   <MapPin className="w-4 h-4" />
-                  <span>Cambridge, MA</span>
+                  <span>San Francisco, CA</span>
                 </div>
                 <div className="flex items-center space-x-1">
                   <Calendar className="w-4 h-4" />
-                  <span>Joined March 2023</span>
+                  <span>Joined January 2023</span>
                 </div>
                 <div className="flex items-center space-x-1">
                   <BookOpen className="w-4 h-4" />
-                  <span>MIT Class of 2025</span>
+                  <span>Stanford Class of 2025</span>
                 </div>
               </div>
             </div>

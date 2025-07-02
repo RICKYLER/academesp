@@ -5,21 +5,21 @@ import { Code, Wrench } from 'lucide-react';
 
 const SkillsSection: React.FC = () => {
   const technicalSkills = [
-    { name: 'JavaScript', level: 90 },
-    { name: 'Python', level: 85 },
-    { name: 'React', level: 88 },
-    { name: 'Node.js', level: 80 },
-    { name: 'Machine Learning', level: 75 },
-    { name: 'SQL', level: 82 }
+    { name: 'Python', level: 92 },
+    { name: 'JavaScript', level: 88 },
+    { name: 'React', level: 85 },
+    { name: 'Java', level: 90 },
+    { name: 'Machine Learning', level: 78 },
+    { name: 'SQL', level: 83 }
   ];
 
   const softSkills = [
-    'Team Leadership',
+    'Leadership',
     'Problem Solving',
     'Communication',
     'Project Management',
     'Critical Thinking',
-    'Time Management'
+    'Teamwork'
   ];
 
   return (
