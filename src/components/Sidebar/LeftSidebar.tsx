@@ -1,15 +1,16 @@
 
 import React from 'react';
 import { User, Users, MessageCircle, Bell, Bookmark, UserCheck } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
 import { useProfile } from '../../contexts/ProfileContext';
 
 const menuItems = [
-  { icon: User, label: 'Profile', active: false },
-  { icon: Users, label: 'My Network', active: true },
-  { icon: MessageCircle, label: 'Messages', active: false },
-  { icon: Bell, label: 'Notifications', active: false },
-  { icon: Bookmark, label: 'Bookmarks', active: false },
-  { icon: UserCheck, label: 'Study Groups', active: false },
+  { icon: User, label: 'Profile', active: false, path: '/profile' },
+  { icon: Users, label: 'My Network', active: true, path: '/' },
+  { icon: MessageCircle, label: 'Messages', active: false, path: '/messages' },
+  { icon: Bell, label: 'Notifications', active: false, path: '/notifications' },
+  { icon: Bookmark, label: 'Bookmarks', active: false, path: '/bookmarks' },
+  { icon: UserCheck, label: 'Study Groups', active: false, path: '/study-groups' },
 ];
 
 const suggestedConnections = [
@@ -21,6 +22,8 @@ const suggestedConnections = [
 
 const LeftSidebar: React.FC = () => {
   const { profileName } = useProfile();
+  const location = useLocation();
+  const currentPath = location.pathname;
 
   return (
     <aside className="w-80 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 h-screen sticky top-16 p-4">
@@ -51,17 +54,18 @@ const LeftSidebar: React.FC = () => {
       <div className="mb-6">
         <div className="space-y-1">
           {menuItems.map((item) => (
-            <button
+            <Link
               key={item.label}
+              to={item.path}
               className={`w-full flex items-center space-x-3 px-3 py-3 rounded-lg transition-colors ${
-                item.active 
+                currentPath === item.path
                   ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400' 
                   : 'hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300'
               }`}
             >
               <item.icon className="w-5 h-5" />
               <span className="font-medium">{item.label}</span>
-            </button>
+            </Link>
           ))}
         </div>
       </div>
