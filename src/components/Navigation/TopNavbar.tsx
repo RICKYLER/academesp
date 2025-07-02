@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Search, Bell, Settings, User, Wallet } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useEthereumWallet } from '../../hooks/useEthereumWallet';
 
@@ -13,9 +14,9 @@ const TopNavbar: React.FC = () => {
       <div className="flex items-center justify-between max-w-7xl mx-auto">
         {/* Logo */}
         <div className="flex items-center space-x-4">
-          <h1 className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+          <Link to="/" className="text-2xl font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors">
             AcademeSpace
-          </h1>
+          </Link>
         </div>
 
         {/* Search Bar */}
@@ -71,9 +72,12 @@ const TopNavbar: React.FC = () => {
             <Bell className="w-5 h-5 text-gray-600 dark:text-gray-300" />
           </button>
           
-          <button className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+          <Link 
+            to="/profile"
+            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+          >
             <User className="w-5 h-5 text-gray-600 dark:text-gray-300" />
-          </button>
+          </Link>
 
           <button
             onClick={toggleTheme}

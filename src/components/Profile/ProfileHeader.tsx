@@ -1,0 +1,89 @@
+
+import React from 'react';
+import { Card, CardContent } from '../ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { MapPin, Calendar, Users, BookOpen, Award, Edit } from 'lucide-react';
+
+const ProfileHeader: React.FC = () => {
+  return (
+    <Card className="mb-6">
+      <CardContent className="p-0">
+        {/* Cover Photo */}
+        <div className="h-48 bg-gradient-to-r from-blue-500 to-purple-600 rounded-t-lg relative">
+          <button className="absolute top-4 right-4 bg-white/20 hover:bg-white/30 text-white p-2 rounded-lg transition-colors">
+            <Edit className="w-4 h-4" />
+          </button>
+        </div>
+        
+        {/* Profile Info */}
+        <div className="px-6 pb-6">
+          <div className="flex flex-col sm:flex-row sm:items-end sm:space-x-6 -mt-16">
+            {/* Avatar */}
+            <div className="relative">
+              <Avatar className="w-32 h-32 border-4 border-white dark:border-gray-800">
+                <AvatarImage src="/placeholder.svg" alt="Profile" />
+                <AvatarFallback className="text-2xl bg-gradient-to-r from-blue-400 to-purple-500 text-white">
+                  JS
+                </AvatarFallback>
+              </Avatar>
+              <button className="absolute bottom-2 right-2 bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full transition-colors">
+                <Edit className="w-3 h-3" />
+              </button>
+            </div>
+            
+            {/* Name and Basic Info */}
+            <div className="flex-1 mt-4 sm:mt-0">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+                    John Student
+                  </h1>
+                  <p className="text-lg text-gray-600 dark:text-gray-300">
+                    Computer Science Student
+                  </p>
+                </div>
+                <button className="mt-4 sm:mt-0 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors">
+                  Edit Profile
+                </button>
+              </div>
+              
+              {/* Stats */}
+              <div className="flex space-x-6 mt-4">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-gray-900 dark:text-white">128</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Connections</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-gray-900 dark:text-white">2.4k</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Study Points</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-gray-900 dark:text-white">15</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Achievements</div>
+                </div>
+              </div>
+              
+              {/* Quick Info */}
+              <div className="flex flex-wrap gap-4 mt-4 text-sm text-gray-600 dark:text-gray-400">
+                <div className="flex items-center space-x-1">
+                  <MapPin className="w-4 h-4" />
+                  <span>Cambridge, MA</span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <Calendar className="w-4 h-4" />
+                  <span>Joined March 2023</span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <BookOpen className="w-4 h-4" />
+                  <span>MIT Class of 2025</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+export default ProfileHeader;
