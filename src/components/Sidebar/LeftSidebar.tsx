@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { User, Users, MessageCircle, Bell, Bookmark, UserCheck } from 'lucide-react';
+import { useProfile } from '../../contexts/ProfileContext';
 
 const menuItems = [
   { icon: User, label: 'Profile', active: false },
@@ -19,6 +20,8 @@ const suggestedConnections = [
 ];
 
 const LeftSidebar: React.FC = () => {
+  const { profileName } = useProfile();
+
   return (
     <aside className="w-80 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 h-screen sticky top-16 p-4">
       {/* Profile Card */}
@@ -28,7 +31,7 @@ const LeftSidebar: React.FC = () => {
             <User className="w-6 h-6" />
           </div>
           <div>
-            <h3 className="font-semibold">John Student</h3>
+            <h3 className="font-semibold">{profileName}</h3>
             <p className="text-sm opacity-90">Computer Science, MIT</p>
           </div>
         </div>
