@@ -1,18 +1,13 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Card, CardContent } from '../ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { MapPin, Calendar, BookOpen } from 'lucide-react';
 import ProfileEditDialog from './ProfileEditDialog';
+import { useProfile } from '../../contexts/ProfileContext';
 
 const ProfileHeader: React.FC = () => {
-  const [profileName, setProfileName] = useState('Alex Thompson');
-  const [profileImage, setProfileImage] = useState('/placeholder.svg');
-
-  const handleProfileSave = (name: string, image: string) => {
-    setProfileName(name);
-    setProfileImage(image);
-  };
+  const { profileName, profileImage } = useProfile();
 
   return (
     <Card className="mb-6">
@@ -20,11 +15,7 @@ const ProfileHeader: React.FC = () => {
         {/* Cover Photo */}
         <div className="h-48 bg-gradient-to-r from-blue-500 to-purple-600 rounded-t-lg relative">
           <div className="absolute top-4 right-4">
-            <ProfileEditDialog
-              currentName={profileName}
-              currentImage={profileImage}
-              onSave={handleProfileSave}
-            />
+            <ProfileEditDialog />
           </div>
         </div>
         

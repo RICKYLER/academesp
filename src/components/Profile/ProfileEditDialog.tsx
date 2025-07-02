@@ -8,27 +8,27 @@ import { Switch } from '../ui/switch';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Settings, Camera, Save, X, Moon, Sun, Bell, Eye, Globe } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
+import { useProfile } from '../../contexts/ProfileContext';
 
-interface ProfileEditDialogProps {
-  currentName: string;
-  currentImage: string;
-  onSave: (name: string, image: string) => void;
-}
-
-const ProfileEditDialog: React.FC<ProfileEditDialogProps> = ({
-  currentName,
-  currentImage,
-  onSave
-}) => {
+const ProfileEditDialog: React.FC = () => {
+  const { profileName, profileImage, updateProfile } = useProfile();
   const [open, setOpen] = useState(false);
-  const [name, setName] = useState(currentName);
-  const [imageUrl, setImageUrl] = useState(currentImage);
+  const [name, setName] = useState(profileName);
+  const [imageUrl, setImageUrl] = useState(profileImage);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [notifications, setNotifications] = useState(true);
   const [publicProfile, setPublicProfile] = useState(true);
   const [onlineStatus, setOnlineStatus] = useState(true);
   
   const { theme, toggleTheme } = useTheme();
+
+  // Update local state when dialog opens
+  React.useEffect(() => {
+    if (open) {
+      setName(profileName);
+      setImageUrl(profileImage);
+    }
+  }, [open, profileName, profileImage]);
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -43,13 +43,13 @@ const ProfileEditDialog: React.FC<ProfileEditDialogProps> = ({
   };
 
   const handleSave = () => {
-    onSave(name, imageUrl);
+    updateProfile(name, imageUrl);
     setOpen(false);
   };
 
   const handleCancel = () => {
-    setName(currentName);
-    setImageUrl(currentImage);
+    setName(profileName);
+    setImageUrl(profileImage);
     setImageFile(null);
     setOpen(false);
   };

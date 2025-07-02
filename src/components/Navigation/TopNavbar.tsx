@@ -1,13 +1,14 @@
+
 import React from 'react';
 import { Search, Bell, Settings, User, Wallet } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useEthereumWallet } from '../../hooks/useEthereumWallet';
+import { useProfile } from '../../contexts/ProfileContext';
+
 const TopNavbar: React.FC = () => {
-  const {
-    theme,
-    toggleTheme
-  } = useTheme();
+  const { theme, toggleTheme } = useTheme();
+  const { profileName } = useProfile();
   const {
     account,
     balance,
@@ -15,20 +16,29 @@ const TopNavbar: React.FC = () => {
     disconnectWallet,
     isConnecting
   } = useEthereumWallet();
-  return <nav className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 px-4 py-3 sticky top-0 z-50">
+
+  return (
+    <nav className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 px-4 py-3 sticky top-0 z-50">
       <div className="flex items-center justify-between max-w-7xl mx-auto">
         {/* Logo */}
         <div className="flex items-center space-x-4">
           <Link to="/" className="text-2xl font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors">
             StudyConnect
           </Link>
+          <span className="text-sm text-gray-500 dark:text-gray-400">
+            Welcome, {profileName.split(' ')[0]}!
+          </span>
         </div>
 
         {/* Search Bar */}
         <div className="flex-1 max-w-md mx-8">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-            <input type="text" placeholder="Search students, study groups, or topics..." className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-full bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400" />
+            <input 
+              type="text" 
+              placeholder="Search students, study groups, or topics..." 
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-full bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400" 
+            />
           </div>
         </div>
 
@@ -36,7 +46,8 @@ const TopNavbar: React.FC = () => {
         <div className="flex items-center space-x-4">
           {/* Wallet Connection */}
           <div className="flex items-center space-x-2">
-            {account ? <div className="flex items-center space-x-2 bg-green-50 dark:bg-green-900/20 px-3 py-2 rounded-lg">
+            {account ? (
+              <div className="flex items-center space-x-2 bg-green-50 dark:bg-green-900/20 px-3 py-2 rounded-lg">
                 <Wallet className="w-4 h-4 text-green-600 dark:text-green-400" />
                 <div className="text-xs">
                   <div className="font-medium text-green-700 dark:text-green-300">
@@ -46,15 +57,25 @@ const TopNavbar: React.FC = () => {
                     {balance} ETH
                   </div>
                 </div>
-                <button onClick={disconnectWallet} className="text-xs text-red-600 hover:text-red-700 dark:text-red-400">
+                <button 
+                  onClick={disconnectWallet} 
+                  className="text-xs text-red-600 hover:text-red-700 dark:text-red-400"
+                >
                   Disconnect
                 </button>
-              </div> : <button onClick={connectWallet} disabled={isConnecting} className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50">
+              </div>
+            ) : (
+              <button 
+                onClick={connectWallet} 
+                disabled={isConnecting} 
+                className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
+              >
                 <Wallet className="w-4 h-4" />
                 <span className="text-sm">
                   {isConnecting ? 'Connecting...' : 'Connect Wallet'}
                 </span>
-              </button>}
+              </button>
+            )}
           </div>
 
           {/* Navigation Icons */}
@@ -66,14 +87,17 @@ const TopNavbar: React.FC = () => {
             <User className="w-5 h-5 text-gray-600 dark:text-gray-300" />
           </Link>
 
-          
-
           {/* Theme Toggle */}
-          <button onClick={toggleTheme} className="px-3 py-1 text-xs bg-gray-200 dark:bg-gray-700 rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+          <button 
+            onClick={toggleTheme} 
+            className="px-3 py-1 text-xs bg-gray-200 dark:bg-gray-700 rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+          >
             {theme === 'light' ? '🌙' : '☀️'}
           </button>
         </div>
       </div>
-    </nav>;
+    </nav>
+  );
 };
+
 export default TopNavbar;
