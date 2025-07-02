@@ -1,18 +1,31 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent } from '../ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
-import { MapPin, Calendar, Users, BookOpen, Award, Edit } from 'lucide-react';
+import { MapPin, Calendar, BookOpen } from 'lucide-react';
+import ProfileEditDialog from './ProfileEditDialog';
 
 const ProfileHeader: React.FC = () => {
+  const [profileName, setProfileName] = useState('Alex Thompson');
+  const [profileImage, setProfileImage] = useState('/placeholder.svg');
+
+  const handleProfileSave = (name: string, image: string) => {
+    setProfileName(name);
+    setProfileImage(image);
+  };
+
   return (
     <Card className="mb-6">
       <CardContent className="p-0">
         {/* Cover Photo */}
         <div className="h-48 bg-gradient-to-r from-blue-500 to-purple-600 rounded-t-lg relative">
-          <button className="absolute top-4 right-4 bg-white/20 hover:bg-white/30 text-white p-2 rounded-lg transition-colors">
-            <Edit className="w-4 h-4" />
-          </button>
+          <div className="absolute top-4 right-4">
+            <ProfileEditDialog
+              currentName={profileName}
+              currentImage={profileImage}
+              onSave={handleProfileSave}
+            />
+          </div>
         </div>
         
         {/* Profile Info */}
@@ -21,14 +34,11 @@ const ProfileHeader: React.FC = () => {
             {/* Avatar */}
             <div className="relative">
               <Avatar className="w-32 h-32 border-4 border-white dark:border-gray-800">
-                <AvatarImage src="/placeholder.svg" alt="Profile" />
+                <AvatarImage src={profileImage} alt="Profile" />
                 <AvatarFallback className="text-2xl bg-gradient-to-r from-blue-400 to-purple-500 text-white">
-                  AS
+                  {profileName.split(' ').map(n => n[0]).join('').toUpperCase()}
                 </AvatarFallback>
               </Avatar>
-              <button className="absolute bottom-2 right-2 bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full transition-colors">
-                <Edit className="w-3 h-3" />
-              </button>
             </div>
             
             {/* Name and Basic Info */}
@@ -36,15 +46,12 @@ const ProfileHeader: React.FC = () => {
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                    Alex Thompson
+                    {profileName}
                   </h1>
                   <p className="text-lg text-gray-600 dark:text-gray-300">
                     Computer Science Student
                   </p>
                 </div>
-                <button className="mt-4 sm:mt-0 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors">
-                  Edit Profile
-                </button>
               </div>
               
               {/* Stats */}
