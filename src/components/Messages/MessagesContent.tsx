@@ -134,6 +134,39 @@ const MessagesContent: React.FC = () => {
     setMessages(initialMessages);
   }, []);
 
+  // Listen for real-time post sharing events
+  useEffect(() => {
+    const handlePostShared = (event: CustomEvent) => {
+      const { postData, message, recipients } = event.detail;
+      
+      // Check if current conversation is in recipients
+      if (selectedConversation && recipients.includes(`msg-${selectedConversation}`)) {
+        const sharedMessage: Message = {
+          id: Date.now().toString(),
+          sender: 'You',
+          content: message,
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          isMe: true,
+          status: 'sent',
+          sharedPost: postData
+        };
+
+        setMessages(prev => [...prev, sharedMessage]);
+        
+        toast({
+          title: "Post shared",
+          description: "Post shared successfully to this conversation",
+        });
+      }
+    };
+
+    window.addEventListener('postShared', handlePostShared as EventListener);
+    
+    return () => {
+      window.removeEventListener('postShared', handlePostShared as EventListener);
+    };
+  }, [selectedConversation, toast]);
+
   // Auto scroll to bottom when new messages arrive
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -567,14 +600,18 @@ const MessagesContent: React.FC = () => {
 
                             {/* Shared post */}
                             {message.sharedPost && (
-                              <div className="mb-3 p-3 rounded-xl bg-white/20 dark:bg-gray-900/20 relative z-10">
+                              <div className="mb-3 p-3 rounded-xl bg-white/20 dark:bg-gray-900/20 relative z-10 border border-white/30">
                                 <div className="flex items-center space-x-2 mb-2">
-                                  <div className="w-6 h-6 rounded-full bg-gradient-to-r from-green-400 to-blue-500 flex items-center justify-center text-xs">
+                                  <div className="w-6 h-6 rounded-full bg-gradient-to-r from-green-400 to-blue-500 flex items-center justify-center text-xs font-bold">
                                     {message.sharedPost.avatar}
                                   </div>
-                                  <span className="text-xs font-semibold">{message.sharedPost.author}</span>
+                                  <span className="text-xs font-semibold opacity-90">{message.sharedPost.author}</span>
                                 </div>
-                                <p className="text-xs opacity-90 line-clamp-3">{message.sharedPost.content}</p>
+                                <p className="text-xs opacity-80 line-clamp-3 leading-relaxed">{message.sharedPost.content}</p>
+                                <div className="mt-2 text-xs opacity-60 flex items-center">
+                                  <Share2 className="w-3 h-3 mr-1" />
+                                  <span>Shared post</span>
+                                </div>
                               </div>
                             )}
 
