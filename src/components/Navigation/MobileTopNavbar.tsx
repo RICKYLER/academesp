@@ -1,151 +1,181 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Menu, Search, X, User, Settings, LogOut } from 'lucide-react';
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import ThemeToggle from '../ThemeToggle';
-import NotificationDropdown from './NotificationDropdown';
+
+import React, { useState, useEffect } from 'react';
+import { Search, Bell, Menu, X, MessageCircle, Users, Home, User, Plus } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { useProfile } from '../../contexts/ProfileContext';
+import { WalletConnect } from '../WalletConnect';
 
 const MobileTopNavbar: React.FC = () => {
+  const { profileName, profileImage } = useProfile();
+  const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  const navigationItems = [
+    { path: '/', icon: Home, label: 'Home', isActive: location.pathname === '/' },
+    { path: '/messages', icon: MessageCircle, label: 'Chat', isActive: location.pathname === '/messages' },
+    { path: '/create', icon: Plus, label: 'Create', isActive: location.pathname === '/create' },
+    { path: '/study-groups', icon: Users, label: 'Groups', isActive: location.pathname === '/study-groups' },
+    { path: '/profile', icon: User, label: 'Profile', isActive: location.pathname === '/profile' },
+  ];
 
-  const toggleSearch = () => {
-    setIsSearchOpen(!isSearchOpen);
-  };
+  const quickActions = [
+    { path: '/profile', label: 'My Profile' },
+    { path: '/notifications', label: 'Notifications' },
+    { path: '/bookmarks', label: 'Saved Posts' },
+    { path: '/settings', label: 'Settings' },
+  ];
+
+  // Add bottom padding to body for mobile bottom navigation
+  useEffect(() => {
+    if (window.innerWidth < 768) {
+      document.body.style.paddingBottom = '70px';
+    } else {
+      document.body.style.paddingBottom = '0';
+    }
+
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        document.body.style.paddingBottom = '70px';
+      } else {
+        document.body.style.paddingBottom = '0';
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      document.body.style.paddingBottom = '0';
+    };
+  }, []);
 
   return (
     <>
-      <nav className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg border-b border-gray-200/50 dark:border-gray-700/50 sticky top-0 z-40 shadow-sm">
-        <div className="px-4 sm:px-6">
-          <div className="flex justify-between items-center h-14">
-            {/* Left side - Menu button */}
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={toggleMenu}
-              className="rounded-full"
+      {/* Main Mobile Navigation */}
+      <nav className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50 md:hidden">
+        <div className="flex items-center justify-between px-4 py-3">
+          {/* Left: Logo & Menu */}
+          <div className="flex items-center space-x-3">
+            <button
+              onClick={() => setIsMenuOpen(true)}
+              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              aria-label="Open menu"
             >
-              <Menu className="w-5 h-5" />
-            </Button>
-
-            {/* Center - Logo */}
-            <Link to="/" className="flex items-center space-x-2">
-              <div className="w-7 h-7 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xs">A</span>
-              </div>
-              <span className="font-bold text-lg text-gray-900 dark:text-white">AcademeNFT</span>
+              <Menu className="w-6 h-6 text-gray-700 dark:text-gray-300" />
+            </button>
+            <Link to="/" className="text-xl font-bold text-blue-600 dark:text-blue-400">
+              Academe
             </Link>
-
-            {/* Right side - Actions */}
-            <div className="flex items-center space-x-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={toggleSearch}
-                className="rounded-full"
-              >
-                <Search className="w-5 h-5" />
-              </Button>
-              
-              {/* Notification Dropdown */}
-              <NotificationDropdown />
-              
-              <ThemeToggle />
-            </div>
           </div>
 
-          {/* Search Bar */}
-          {isSearchOpen && (
-            <div className="py-3 border-t border-gray-200 dark:border-gray-700">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                <Input
-                  type="text"
-                  placeholder="Search..."
-                  className="pl-10 bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600"
-                  autoFocus
-                />
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 w-6 h-6"
-                  onClick={toggleSearch}
-                >
-                  <X className="w-4 h-4" />
-                </Button>
-              </div>
-            </div>
-          )}
+          {/* Right: Actions */}
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={() => setIsSearchOpen(true)}
+              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              aria-label="Search"
+            >
+              <Search className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+            </button>
+            <button className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors relative">
+              <Bell className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+              <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full text-xs"></span>
+            </button>
+            <WalletConnect className="scale-90" />
+          </div>
         </div>
       </nav>
 
+      {/* Bottom Navigation - Facebook Lite Style */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 z-50 md:hidden">
+        <div className="flex items-center justify-around py-2">
+          {navigationItems.map((item) => (
+            <Link
+              key={item.path}
+              to={item.path}
+              className={`flex flex-col items-center justify-center py-2 px-3 min-w-0 flex-1 transition-colors ${
+                item.isActive
+                  ? 'text-blue-600 dark:text-blue-400'
+                  : 'text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400'
+              }`}
+            >
+              <div className={`p-1 rounded-lg ${item.isActive ? 'bg-blue-50 dark:bg-blue-900/20' : ''}`}>
+                <item.icon className={`w-6 h-6 ${item.isActive ? 'text-blue-600 dark:text-blue-400' : ''}`} />
+              </div>
+              <span className="text-xs font-medium mt-1 text-center leading-tight">
+                {item.label}
+              </span>
+            </Link>
+          ))}
+        </div>
+      </div>
+
       {/* Mobile Menu Overlay */}
       {isMenuOpen && (
-        <>
-          <div 
-            className="fixed inset-0 bg-black/50 z-40"
-            onClick={toggleMenu}
-          />
-          <div className="fixed top-0 left-0 w-80 h-full bg-white dark:bg-gray-900 z-50 transform transition-transform duration-300 shadow-2xl">
+        <div className="fixed inset-0 z-50 md:hidden">
+          <div className="absolute inset-0 bg-black/50" onClick={() => setIsMenuOpen(false)} />
+          <div className="absolute left-0 top-0 h-full w-80 bg-white dark:bg-gray-900 shadow-xl">
             {/* Menu Header */}
             <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-gradient-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center text-white font-bold">
-                  JD
-                </div>
+                <Avatar className="w-10 h-10">
+                  <AvatarImage src={profileImage} alt="Profile" />
+                  <AvatarFallback className="bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold">
+                    {profileName.split(' ').map(n => n[0]).join('')}
+                  </AvatarFallback>
+                </Avatar>
                 <div>
-                  <p className="font-semibold text-gray-900 dark:text-white">John Doe</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">Student</p>
+                  <h3 className="font-semibold text-gray-900 dark:text-white">{profileName}</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">View your profile</p>
                 </div>
               </div>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={toggleMenu}
-                className="rounded-full"
+              <button
+                onClick={() => setIsMenuOpen(false)}
+                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
               >
                 <X className="w-5 h-5" />
-              </Button>
+              </button>
             </div>
 
             {/* Menu Items */}
-            <div className="p-4 space-y-1">
-              <Link
-                to="/profile"
-                className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                onClick={toggleMenu}
-              >
-                <User className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-                <span className="font-medium text-gray-900 dark:text-white">Profile</span>
-              </Link>
-              
-              <Link
-                to="/settings"
-                className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                onClick={toggleMenu}
-              >
-                <Settings className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-                <span className="font-medium text-gray-900 dark:text-white">Settings</span>
-              </Link>
-              
-              <button
-                className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors w-full text-left"
-                onClick={() => {
-                  toggleMenu();
-                  // Handle logout
-                }}
-              >
-                <LogOut className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-                <span className="font-medium text-gray-900 dark:text-white">Sign out</span>
-              </button>
+            <div className="p-4 space-y-2">
+              {quickActions.map((action) => (
+                <Link
+                  key={action.path}
+                  to={action.path}
+                  onClick={() => setIsMenuOpen(false)}
+                  className="block w-full text-left p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                >
+                  <span className="text-gray-900 dark:text-white font-medium">{action.label}</span>
+                </Link>
+              ))}
             </div>
           </div>
-        </>
+        </div>
+      )}
+
+      {/* Search Overlay */}
+      {isSearchOpen && (
+        <div className="fixed inset-0 z-50 bg-white dark:bg-gray-900 md:hidden">
+          <div className="flex items-center p-4 border-b border-gray-200 dark:border-gray-700">
+            <button
+              onClick={() => setIsSearchOpen(false)}
+              className="p-2 mr-3 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            <input
+              type="text"
+              placeholder="Search students, groups..."
+              className="flex-1 p-3 bg-gray-100 dark:bg-gray-800 rounded-full outline-none"
+              autoFocus
+            />
+          </div>
+          <div className="p-4">
+            <p className="text-gray-500 dark:text-gray-400 text-center">Start typing to search...</p>
+          </div>
+        </div>
       )}
     </>
   );

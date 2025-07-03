@@ -1,150 +1,102 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Menu, Search, MessageSquare, Settings, LogOut, User, Home, Users, BookOpen, Wallet, Star } from 'lucide-react';
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
+
+import React from 'react';
+import { Search, Bell, Settings, User, Wallet } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { useTheme } from '../../contexts/ThemeContext';
+import { useEthereumWallet } from '../../hooks/useEthereumWallet';
+import { useProfile } from '../../contexts/ProfileContext';
 import ThemeToggle from '../ThemeToggle';
-import NotificationDropdown from './NotificationDropdown';
+import '../ThemeToggle.css';
 
 const TopNavbar: React.FC = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const navigate = useNavigate();
-
-  const navigationItems = [
-    { name: 'Home', href: '/', icon: Home },
-    { name: 'Profile', href: '/profile', icon: User },
-    { name: 'Study Groups', href: '/study-groups', icon: Users },
-    { name: 'Messages', href: '/messages', icon: MessageSquare },
-    { name: 'Create', href: '/create', icon: BookOpen },
-    { name: 'Wallet', href: '/wallet-demo', icon: Wallet },
-    { name: 'Algebrain', href: '/algebrain', icon: Star },
-    { name: 'Bookmarks', href: '/bookmarks', icon: Star }
-  ];
+  const { theme, toggleTheme } = useTheme();
+  const { profileName } = useProfile();
+  const {
+    account,
+    balance,
+    connectWallet,
+    disconnectWallet,
+    isConnecting
+  } = useEthereumWallet();
 
   return (
-    <nav className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg border-b border-gray-200/50 dark:border-gray-700/50 sticky top-0 z-40 shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <div className="flex items-center">
-            <Link to="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">A</span>
-              </div>
-              <span className="font-bold text-xl text-gray-900 dark:text-white">AcademeNFT</span>
-            </Link>
-          </div>
+    <nav className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 px-4 py-3 sticky top-0 z-50">
+      <div className="flex items-center justify-between max-w-7xl mx-auto">
+        {/* Logo */}
+        <div className="flex items-center space-x-4">
+          <Link to="/" className="text-2xl font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors">
+            Academe Space
+          </Link>
+          <span className="text-sm text-gray-500 dark:text-gray-400 hidden lg:inline">
+            Welcome, {profileName.split(' ')[0]}!
+          </span>
+        </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navigationItems.map((item) => (
-              <Link
-                key={item.name}
-                to={item.href}
-                className="flex items-center space-x-1 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-              >
-                <item.icon className="w-4 h-4" />
-                <span className="text-sm font-medium">{item.name}</span>
-              </Link>
-            ))}
-          </div>
-
-          {/* Search Bar */}
-          <div className="hidden lg:flex items-center flex-1 max-w-lg mx-8">
-            <div className="relative w-full">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-              <Input
-                type="text"
-                placeholder="Search students, groups, posts..."
-                className="pl-10 bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
-          </div>
-
-          {/* Right Side Actions */}
-          <div className="flex items-center space-x-4">
-            {/* Notification Dropdown */}
-            <NotificationDropdown />
-
-            {/* Theme Toggle */}
-            <ThemeToggle />
-
-            {/* Profile Menu */}
-            <div className="relative">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="rounded-full"
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-              >
-                <div className="w-8 h-8 bg-gradient-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                  JD
-                </div>
-              </Button>
-
-              {/* Dropdown Menu */}
-              {isMenuOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-900 rounded-md shadow-lg py-1 z-50 border border-gray-200 dark:border-gray-700">
-                  <Link
-                    to="/profile"
-                    className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    <User className="w-4 h-4 mr-3" />
-                    Profile
-                  </Link>
-                  <Link
-                    to="/settings"
-                    className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    <Settings className="w-4 h-4 mr-3" />
-                    Settings
-                  </Link>
-                  <button
-                    className="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-                    onClick={() => {
-                      setIsMenuOpen(false);
-                      // Handle logout
-                    }}
-                  >
-                    <LogOut className="w-4 h-4 mr-3" />
-                    Sign out
-                  </button>
-                </div>
-              )}
-            </div>
-
-            {/* Mobile Menu Toggle */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              <Menu className="w-5 h-5" />
-            </Button>
+        {/* Search Bar */}
+        <div className="flex-1 max-w-md mx-8 hidden lg:block">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <input 
+              type="text" 
+              placeholder="Search students, study groups, or topics..." 
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-full bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400" 
+            />
           </div>
         </div>
 
-        {/* Mobile Navigation */}
-        {isMenuOpen && (
-          <div className="md:hidden py-4 border-t border-gray-200 dark:border-gray-700">
-            <div className="flex flex-col space-y-2">
-              {navigationItems.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  className="flex items-center space-x-2 px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors"
-                  onClick={() => setIsMenuOpen(false)}
+        {/* Right Icons */}
+        <div className="flex items-center space-x-4">
+          {/* Wallet Connection */}
+          <div className="flex items-center space-x-2">
+            {account ? (
+              <div className="flex items-center space-x-2 bg-green-50 dark:bg-green-900/20 px-3 py-2 rounded-lg">
+                <Wallet className="w-4 h-4 text-green-600 dark:text-green-400" />
+                <div className="text-xs hidden md:block">
+                  <div className="font-medium text-green-700 dark:text-green-300">
+                    {account.slice(0, 6)}...{account.slice(-4)}
+                  </div>
+                  <div className="text-green-600 dark:text-green-400">
+                    {balance} ETH
+                  </div>
+                </div>
+                <button 
+                  onClick={disconnectWallet} 
+                  className="text-xs text-red-600 hover:text-red-700 dark:text-red-400 hidden md:inline"
                 >
-                  <item.icon className="w-4 h-4" />
-                  <span className="text-sm font-medium">{item.name}</span>
-                </Link>
-              ))}
-            </div>
+                  Disconnect
+                </button>
+              </div>
+            ) : (
+              <button 
+                onClick={connectWallet} 
+                disabled={isConnecting} 
+                className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
+              >
+                <Wallet className="w-4 h-4" />
+                <span className="text-sm hidden md:inline">
+                  {isConnecting ? 'Connecting...' : 'Connect Wallet'}
+                </span>
+              </button>
+            )}
           </div>
-        )}
+
+          {/* Navigation Icons */}
+          <button className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+            <Bell className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+          </button>
+          
+          <Link to="/profile" className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+            <User className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+          </Link>
+
+          {/* Theme Toggle */}
+          <div className="flex items-center">
+            <ThemeToggle 
+              isDark={theme === 'dark'} 
+              onToggle={toggleTheme} 
+            />
+          </div>
+        </div>
       </div>
     </nav>
   );
