@@ -13,6 +13,7 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ isDark, onToggle }) => {
       className={`tdnn ${isDark ? '' : 'day'}`}
       onClick={onToggle}
       style={{ cursor: 'pointer' }}
+      title={`Switch to ${isDark ? 'light' : 'dark'} mode`}
     >
       <div className={`moon ${isDark ? '' : 'sun'}`}></div>
     </div>
