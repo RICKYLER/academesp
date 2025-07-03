@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { useBookmarks } from '../../contexts/BookmarkContext';
+import ShareModal from './ShareModal';
 
 interface Comment {
   id: number;
@@ -85,6 +86,8 @@ const NewsFeed: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>(initialPosts);
   const [newComments, setNewComments] = useState<{ [key: number]: string }>({});
   const [showComments, setShowComments] = useState<{ [key: number]: boolean }>({});
+  const [shareModalOpen, setShareModalOpen] = useState(false);
+  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const { toast } = useToast();
   const { addBookmark, removeBookmark, isBookmarked } = useBookmarks();
 
@@ -123,6 +126,44 @@ const NewsFeed: React.FC = () => {
         duration: 2000,
       });
     }
+  };
+
+  const handleShare = (postId: number, message?: string, recipients?: string[]) => {
+    setPosts(prevPosts =>
+      prevPosts.map(post =>
+        post.id === postId
+          ? { ...post, shares: post.shares + 1 }
+          : post
+      )
+    );
+
+    // Simulate real-time sharing by adding a new post if sharing publicly
+    if (!recipients || recipients.length === 0) {
+      const originalPost = posts.find(p => p.id === postId);
+      if (originalPost) {
+        const sharedPost: Post = {
+          id: Date.now(),
+          author: 'You',
+          avatar: '😊',
+          time: 'now',
+          content: message ? 
+            `${message}\n\n--- Shared from ${originalPost.author} ---\n${originalPost.content}` :
+            `--- Shared from ${originalPost.author} ---\n${originalPost.content}`,
+          likes: 0,
+          comments: [],
+          shares: 0,
+          type: 'shared',
+          isLiked: false
+        };
+        
+        setPosts(prevPosts => [sharedPost, ...prevPosts]);
+      }
+    }
+  };
+
+  const openShareModal = (post: Post) => {
+    setSelectedPost(post);
+    setShareModalOpen(true);
   };
 
   const handleComment = (postId: number) => {
@@ -193,7 +234,7 @@ const NewsFeed: React.FC = () => {
 
           {/* Post Content */}
           <div className="mb-4">
-            <p className="text-gray-800 dark:text-gray-200 leading-relaxed">
+            <p className="text-gray-800 dark:text-gray-200 leading-relaxed whitespace-pre-line">
               {post.content}
             </p>
           </div>
@@ -221,7 +262,10 @@ const NewsFeed: React.FC = () => {
                 <span className="text-sm">{post.comments.length}</span>
               </button>
               
-              <button className="flex items-center space-x-2 text-gray-500 hover:text-green-500 dark:text-gray-400 dark:hover:text-green-400 transition-colors">
+              <button 
+                onClick={() => openShareModal(post)}
+                className="flex items-center space-x-2 text-gray-500 hover:text-green-500 dark:text-gray-400 dark:hover:text-green-400 transition-colors"
+              >
                 <Share2 className="w-5 h-5" />
                 <span className="text-sm">{post.shares}</span>
               </button>
@@ -298,6 +342,14 @@ const NewsFeed: React.FC = () => {
           )}
         </div>
       ))}
+
+      {/* Share Modal */}
+      <ShareModal
+        isOpen={shareModalOpen}
+        onClose={() => setShareModalOpen(false)}
+        post={selectedPost}
+        onShare={handleShare}
+      />
     </div>
   );
 };
