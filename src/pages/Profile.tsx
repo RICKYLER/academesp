@@ -1,12 +1,12 @@
 
 import React from 'react';
 import { ThemeProvider } from '../contexts/ThemeContext';
-import ProfileLayout from '../components/Profile/ProfileLayout';
+import MobileProfileLayout from '../components/Profile/MobileProfileLayout';
 
 const Profile: React.FC = () => {
   return (
     <ThemeProvider>
-      <ProfileLayout />
+      <MobileProfileLayout />
     </ThemeProvider>
   );
 };

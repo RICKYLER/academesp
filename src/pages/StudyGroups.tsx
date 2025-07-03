@@ -1,12 +1,12 @@
 
 import React from 'react';
 import { ThemeProvider } from '../contexts/ThemeContext';
-import StudyGroupsLayout from '../components/StudyGroups/StudyGroupsLayout';
+import MobileStudyGroupsLayout from '../components/StudyGroups/MobileStudyGroupsLayout';
 
 const StudyGroups: React.FC = () => {
   return (
     <ThemeProvider>
-      <StudyGroupsLayout />
+      <MobileStudyGroupsLayout />
     </ThemeProvider>
   );
 };

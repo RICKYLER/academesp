@@ -1,12 +1,12 @@
 
 import React from 'react';
 import { ThemeProvider } from '../contexts/ThemeContext';
-import MessagesLayout from '../components/Messages/MessagesLayout';
+import MobileMessagesLayout from '../components/Messages/MobileMessagesLayout';
 
 const Messages: React.FC = () => {
   return (
     <ThemeProvider>
-      <MessagesLayout />
+      <MobileMessagesLayout />
     </ThemeProvider>
   );
 };

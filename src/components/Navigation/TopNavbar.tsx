@@ -27,13 +27,13 @@ const TopNavbar: React.FC = () => {
           <Link to="/" className="text-2xl font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors">
             Academe Space
           </Link>
-          <span className="text-sm text-gray-500 dark:text-gray-400">
+          <span className="text-sm text-gray-500 dark:text-gray-400 hidden lg:inline">
             Welcome, {profileName.split(' ')[0]}!
           </span>
         </div>
 
         {/* Search Bar */}
-        <div className="flex-1 max-w-md mx-8">
+        <div className="flex-1 max-w-md mx-8 hidden lg:block">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
             <input 
@@ -51,7 +51,7 @@ const TopNavbar: React.FC = () => {
             {account ? (
               <div className="flex items-center space-x-2 bg-green-50 dark:bg-green-900/20 px-3 py-2 rounded-lg">
                 <Wallet className="w-4 h-4 text-green-600 dark:text-green-400" />
-                <div className="text-xs">
+                <div className="text-xs hidden md:block">
                   <div className="font-medium text-green-700 dark:text-green-300">
                     {account.slice(0, 6)}...{account.slice(-4)}
                   </div>
@@ -61,7 +61,7 @@ const TopNavbar: React.FC = () => {
                 </div>
                 <button 
                   onClick={disconnectWallet} 
-                  className="text-xs text-red-600 hover:text-red-700 dark:text-red-400"
+                  className="text-xs text-red-600 hover:text-red-700 dark:text-red-400 hidden md:inline"
                 >
                   Disconnect
                 </button>
@@ -73,7 +73,7 @@ const TopNavbar: React.FC = () => {
                 className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
               >
                 <Wallet className="w-4 h-4" />
-                <span className="text-sm">
+                <span className="text-sm hidden md:inline">
                   {isConnecting ? 'Connecting...' : 'Connect Wallet'}
                 </span>
               </button>
