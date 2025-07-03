@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Search, Bell, Menu, X, MessageCircle, Users } from 'lucide-react';
+import { Search, Bell, Menu, X, MessageCircle, Users, Home, User, Plus } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useProfile } from '../../contexts/ProfileContext';
 import { WalletConnect } from '../WalletConnect';
@@ -12,9 +12,11 @@ const MobileTopNavbar: React.FC = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const navigationItems = [
-    { path: '/', icon: Users, label: 'Home', isActive: location.pathname === '/' },
-    { path: '/messages', icon: MessageCircle, label: 'Messages', isActive: location.pathname === '/messages' },
+    { path: '/', icon: Home, label: 'Home', isActive: location.pathname === '/' },
+    { path: '/messages', icon: MessageCircle, label: 'Chat', isActive: location.pathname === '/messages' },
+    { path: '/create', icon: Plus, label: 'Create', isActive: location.pathname === '/create' },
     { path: '/study-groups', icon: Users, label: 'Groups', isActive: location.pathname === '/study-groups' },
+    { path: '/profile', icon: User, label: 'Profile', isActive: location.pathname === '/profile' },
   ];
 
   const quickActions = [
@@ -59,25 +61,43 @@ const MobileTopNavbar: React.FC = () => {
             <WalletConnect className="scale-90" />
           </div>
         </div>
+      </nav>
 
-        {/* Bottom Tab Navigation */}
-        <div className="flex border-t border-gray-200 dark:border-gray-700">
+      {/* Bottom Navigation - Facebook Lite Style */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 z-50 md:hidden">
+        <div className="flex items-center justify-around py-2">
           {navigationItems.map((item) => (
             <Link
               key={item.path}
               to={item.path}
-              className={`flex-1 py-3 px-2 text-center transition-colors ${
+              className={`flex flex-col items-center justify-center py-2 px-3 min-w-0 flex-1 transition-colors ${
                 item.isActive
-                  ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20'
-                  : 'text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400'
+                  ? 'text-blue-600 dark:text-blue-400'
+                  : 'text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400'
               }`}
             >
-              <item.icon className="w-5 h-5 mx-auto mb-1" />
-              <span className="text-xs font-medium">{item.label}</span>
+              <div className={`p-1 rounded-lg ${item.isActive ? 'bg-blue-50 dark:bg-blue-900/20' : ''}`}>
+                <item.icon className={`w-6 h-6 ${item.isActive ? 'text-blue-600 dark:text-blue-400' : ''}`} />
+              </div>
+              <span className="text-xs font-medium mt-1 text-center leading-tight">
+                {item.label}
+              </span>
             </Link>
           ))}
         </div>
-      </nav>
+      </div>
+
+      {/* Add bottom padding to main content to account for fixed bottom nav */}
+      <style jsx global>{`
+        body {
+          padding-bottom: 70px;
+        }
+        @media (min-width: 768px) {
+          body {
+            padding-bottom: 0;
+          }
+        }
+      `}</style>
 
       {/* Mobile Menu Overlay */}
       {isMenuOpen && (

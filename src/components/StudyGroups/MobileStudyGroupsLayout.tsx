@@ -16,7 +16,7 @@ const MobileStudyGroupsLayout: React.FC = () => {
         </div>
         
         {/* Main Content */}
-        <main className="flex-1 p-3 md:p-6">
+        <main className="flex-1 p-3 md:p-6 pb-20 md:pb-6">
           <StudyGroupsContent />
         </main>
       </div>

@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -8,6 +9,7 @@ import Index from "./pages/Index";
 import Profile from "./pages/Profile";
 import StudyGroups from "./pages/StudyGroups";
 import Messages from "./pages/Messages";
+import Create from "./pages/Create";
 import WalletDemo from "./pages/WalletDemo";
 import NotFound from "./pages/NotFound";
 
@@ -23,6 +25,7 @@ const App = () => (
             <Route path="/profile" element={<Profile />} />
             <Route path="/study-groups" element={<StudyGroups />} />
             <Route path="/messages" element={<Messages />} />
+            <Route path="/create" element={<Create />} />
             <Route path="/wallet-demo" element={<WalletDemo />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
