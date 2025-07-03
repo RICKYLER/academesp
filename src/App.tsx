@@ -11,7 +11,6 @@ import StudyGroups from "./pages/StudyGroups";
 import Messages from "./pages/Messages";
 import Create from "./pages/Create";
 import WalletDemo from "./pages/WalletDemo";
-import Algebrain from "./pages/Algebrain";
 import NotFound from "./pages/NotFound";
 
 const App = () => (
@@ -28,7 +27,6 @@ const App = () => (
             <Route path="/messages" element={<Messages />} />
             <Route path="/create" element={<Create />} />
             <Route path="/wallet-demo" element={<WalletDemo />} />
-            <Route path="/algebrain" element={<Algebrain />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
