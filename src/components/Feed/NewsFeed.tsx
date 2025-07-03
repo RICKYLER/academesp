@@ -1,8 +1,31 @@
+import React, { useState } from 'react';
+import { Heart, MessageCircle, Share2, Bookmark, MoreHorizontal, Send } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
 
-import React from 'react';
-import { Heart, MessageCircle, Share2, Bookmark, MoreHorizontal } from 'lucide-react';
+interface Comment {
+  id: number;
+  author: string;
+  content: string;
+  time: string;
+  avatar: string;
+}
 
-const posts = [
+interface Post {
+  id: number;
+  author: string;
+  avatar: string;
+  time: string;
+  content: string;
+  likes: number;
+  comments: Comment[];
+  shares: number;
+  type: string;
+  isLiked: boolean;
+}
+
+const initialPosts: Post[] = [
   {
     id: 1,
     author: 'Study Tips Central',
@@ -10,9 +33,18 @@ const posts = [
     time: '2h',
     content: 'Master the Pomodoro Technique: 25 minutes focused study + 5 minute break. After 4 cycles, take a 30-minute break. This method can improve your concentration by up to 40%!',
     likes: 234,
-    comments: 45,
+    comments: [
+      {
+        id: 1,
+        author: 'Sarah M.',
+        content: 'This technique really works! Been using it for weeks now.',
+        time: '1h',
+        avatar: '👩'
+      }
+    ],
     shares: 12,
-    type: 'tip'
+    type: 'tip',
+    isLiked: false
   },
   {
     id: 2,
@@ -21,9 +53,10 @@ const posts = [
     time: '4h',
     content: 'Registration is now OPEN for MIT\'s biggest hackathon! 💻 Win $50,000 in prizes, network with tech leaders, and build the next big thing. Limited spots available!',
     likes: 892,
-    comments: 156,
+    comments: [],
     shares: 203,
-    type: 'event'
+    type: 'event',
+    isLiked: false
   },
   {
     id: 3,
@@ -32,13 +65,90 @@ const posts = [
     time: '6h',
     content: 'Just discovered this amazing study spot at the university library - Level 3 has the perfect ambient noise and natural lighting. Perfect for deep focus sessions! 📖✨',
     likes: 127,
-    comments: 23,
+    comments: [
+      {
+        id: 2,
+        author: 'Mike T.',
+        content: 'Thanks for sharing! I need to check this out.',
+        time: '30m',
+        avatar: '👨'
+      }
+    ],
     shares: 8,
-    type: 'location'
+    type: 'location',
+    isLiked: false
   }
 ];
 
 const NewsFeed: React.FC = () => {
+  const [posts, setPosts] = useState<Post[]>(initialPosts);
+  const [newComments, setNewComments] = useState<{ [key: number]: string }>({});
+  const [showComments, setShowComments] = useState<{ [key: number]: boolean }>({});
+  const { toast } = useToast();
+
+  const handleLike = (postId: number) => {
+    setPosts(prevPosts =>
+      prevPosts.map(post =>
+        post.id === postId
+          ? {
+              ...post,
+              likes: post.isLiked ? post.likes - 1 : post.likes + 1,
+              isLiked: !post.isLiked
+            }
+          : post
+      )
+    );
+
+    toast({
+      description: posts.find(p => p.id === postId)?.isLiked 
+        ? "Removed like" 
+        : "Post liked!",
+      duration: 2000,
+    });
+  };
+
+  const handleComment = (postId: number) => {
+    const commentText = newComments[postId]?.trim();
+    if (!commentText) return;
+
+    const newComment: Comment = {
+      id: Date.now(),
+      author: 'You',
+      content: commentText,
+      time: 'now',
+      avatar: '😊'
+    };
+
+    setPosts(prevPosts =>
+      prevPosts.map(post =>
+        post.id === postId
+          ? {
+              ...post,
+              comments: [...post.comments, newComment]
+            }
+          : post
+      )
+    );
+
+    setNewComments(prev => ({ ...prev, [postId]: '' }));
+    
+    toast({
+      description: "Comment added!",
+      duration: 2000,
+    });
+  };
+
+  const toggleComments = (postId: number) => {
+    setShowComments(prev => ({
+      ...prev,
+      [postId]: !prev[postId]
+    }));
+  };
+
+  const handleCommentChange = (postId: number, value: string) => {
+    setNewComments(prev => ({ ...prev, [postId]: value }));
+  };
+
   return (
     <div className="space-y-6">
       {posts.map((post) => (
@@ -73,14 +183,24 @@ const NewsFeed: React.FC = () => {
           {/* Post Actions */}
           <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-700">
             <div className="flex items-center space-x-6">
-              <button className="flex items-center space-x-2 text-gray-500 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400 transition-colors">
-                <Heart className="w-5 h-5" />
+              <button 
+                onClick={() => handleLike(post.id)}
+                className={`flex items-center space-x-2 transition-colors ${
+                  post.isLiked 
+                    ? 'text-red-500 dark:text-red-400' 
+                    : 'text-gray-500 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400'
+                }`}
+              >
+                <Heart className={`w-5 h-5 ${post.isLiked ? 'fill-current' : ''}`} />
                 <span className="text-sm">{post.likes}</span>
               </button>
               
-              <button className="flex items-center space-x-2 text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400 transition-colors">
+              <button 
+                onClick={() => toggleComments(post.id)}
+                className="flex items-center space-x-2 text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400 transition-colors"
+              >
                 <MessageCircle className="w-5 h-5" />
-                <span className="text-sm">{post.comments}</span>
+                <span className="text-sm">{post.comments.length}</span>
               </button>
               
               <button className="flex items-center space-x-2 text-gray-500 hover:text-green-500 dark:text-gray-400 dark:hover:text-green-400 transition-colors">
@@ -93,6 +213,64 @@ const NewsFeed: React.FC = () => {
               <Bookmark className="w-5 h-5 text-gray-500 dark:text-gray-400" />
             </button>
           </div>
+
+          {/* Comments Section */}
+          {showComments[post.id] && (
+            <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
+              {/* Existing Comments */}
+              <div className="space-y-3 mb-4">
+                {post.comments.map((comment) => (
+                  <div key={comment.id} className="flex items-start space-x-3">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-green-400 to-blue-500 flex items-center justify-center text-sm">
+                      {comment.avatar}
+                    </div>
+                    <div className="flex-1">
+                      <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
+                        <div className="flex items-center space-x-2 mb-1">
+                          <span className="font-semibold text-sm text-gray-900 dark:text-white">
+                            {comment.author}
+                          </span>
+                          <span className="text-xs text-gray-500 dark:text-gray-400">
+                            {comment.time} ago
+                          </span>
+                        </div>
+                        <p className="text-sm text-gray-700 dark:text-gray-300">
+                          {comment.content}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Add Comment */}
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-400 to-pink-500 flex items-center justify-center text-sm">
+                  😊
+                </div>
+                <div className="flex-1 flex space-x-2">
+                  <Input
+                    placeholder="Write a comment..."
+                    value={newComments[post.id] || ''}
+                    onChange={(e) => handleCommentChange(post.id, e.target.value)}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter') {
+                        handleComment(post.id);
+                      }
+                    }}
+                    className="flex-1"
+                  />
+                  <Button
+                    onClick={() => handleComment(post.id)}
+                    size="sm"
+                    disabled={!newComments[post.id]?.trim()}
+                  >
+                    <Send className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       ))}
     </div>
