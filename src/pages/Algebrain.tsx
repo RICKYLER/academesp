@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Brain, Send, User, Bot, Calculator, BookOpen, Trophy, Lightbulb } from 'lucide-react';
+import { Brain, Send, User, Bot, Calculator, BookOpen, Trophy, Lightbulb, RefreshCw } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface Message {
@@ -46,6 +46,17 @@ const Algebrain = () => {
     setInput(example);
   };
 
+  const clearChat = () => {
+    setMessages([
+      {
+        id: '1',
+        role: 'assistant',
+        content: 'Hello! I\'m Algebrain, your AI-powered math tutor. I can help you solve equations, understand concepts, and work through problems step-by-step. What math topic would you like to explore today?',
+        timestamp: new Date()
+      }
+    ]);
+  };
+
   const sendMessage = async () => {
     if (!input.trim()) return;
 
@@ -75,7 +86,7 @@ const Algebrain = () => {
           messages: [
             {
               role: 'system',
-              content: 'You are Algebrain, an expert AI math tutor. Help students understand mathematical concepts by providing clear, step-by-step explanations. Always be encouraging and patient. Format your responses to be educational and easy to follow. Focus on mathematics, algebra, calculus, geometry, and related topics.'
+              content: 'You are Algebrain, an expert AI math tutor. Help students understand mathematical concepts by providing clear, step-by-step explanations. Always be encouraging and patient. Format your responses to be educational and easy to follow. Focus on mathematics, algebra, calculus, geometry, and related topics. Use proper mathematical notation when needed.'
             },
             ...messages.map(msg => ({
               role: msg.role === 'assistant' ? 'assistant' : 'user',
@@ -86,7 +97,7 @@ const Algebrain = () => {
               content: currentInput
             }
           ],
-          max_tokens: 1000,
+          max_tokens: 1500,
           temperature: 0.7,
           stream: false
         }),
@@ -116,8 +127,8 @@ const Algebrain = () => {
     } catch (error) {
       console.error('Error:', error);
       toast({
-        title: 'Error',
-        description: 'Failed to get response from Algebrain. Please check the console for details.',
+        title: 'Connection Error',
+        description: 'Failed to connect to Venice AI. Please check your internet connection and try again.',
         variant: 'destructive',
       });
       
@@ -125,7 +136,7 @@ const Algebrain = () => {
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: 'Sorry, I\'m having trouble connecting right now. Please try again in a moment.',
+        content: 'I\'m having trouble connecting to the AI service right now. Please check your internet connection and try again in a moment. If the problem persists, the Venice AI service might be temporarily unavailable.',
         timestamp: new Date()
       };
       setMessages(prev => [...prev, errorMessage]);
@@ -154,15 +165,30 @@ const Algebrain = () => {
           <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
             Algebrain
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300">
+          <p className="text-lg text-gray-600 dark:text-gray-300 mb-4">
             Your AI-powered math tutor powered by Venice AI
           </p>
+          <div className="flex items-center justify-center space-x-2 text-sm text-gray-500">
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+            <span>Connected to Venice AI</span>
+          </div>
         </div>
 
         {/* Quick Examples */}
         <Card className="mb-6">
           <CardHeader>
-            <CardTitle className="text-lg">Quick Start Examples</CardTitle>
+            <CardTitle className="text-lg flex items-center justify-between">
+              Quick Start Examples
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={clearChat}
+                className="text-xs"
+              >
+                <RefreshCw className="w-4 h-4 mr-1" />
+                Clear Chat
+              </Button>
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -170,7 +196,7 @@ const Algebrain = () => {
                 <Button
                   key={index}
                   variant="outline"
-                  className="h-auto p-4 text-left justify-start hover:bg-green-50 dark:hover:bg-green-900/20"
+                  className="h-auto p-4 text-left justify-start hover:bg-green-50 dark:hover:bg-green-900/20 transition-all duration-200"
                   onClick={() => handleQuickExample(example.text)}
                 >
                   <example.icon className="w-5 h-5 mr-3 text-green-600" />
@@ -185,11 +211,16 @@ const Algebrain = () => {
         </Card>
 
         {/* Chat Interface */}
-        <Card className="h-[500px] flex flex-col">
-          <CardHeader className="pb-4">
-            <CardTitle className="flex items-center">
-              <Brain className="w-5 h-5 mr-2 text-green-600" />
-              Math Tutoring Session
+        <Card className="h-[600px] flex flex-col shadow-lg">
+          <CardHeader className="pb-4 border-b">
+            <CardTitle className="flex items-center justify-between">
+              <div className="flex items-center">
+                <Brain className="w-5 h-5 mr-2 text-green-600" />
+                Math Tutoring Session
+              </div>
+              <div className="text-sm text-gray-500">
+                {messages.length - 1} messages
+              </div>
             </CardTitle>
           </CardHeader>
           
@@ -201,7 +232,7 @@ const Algebrain = () => {
                   key={message.id}
                   className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
-                  <div className={`flex items-start space-x-2 max-w-[80%] ${
+                  <div className={`flex items-start space-x-2 max-w-[85%] ${
                     message.role === 'user' ? 'flex-row-reverse space-x-reverse' : 'flex-row'
                   }`}>
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
@@ -215,13 +246,13 @@ const Algebrain = () => {
                         <Bot className="w-4 h-4 text-white" />
                       )}
                     </div>
-                    <div className={`rounded-lg p-3 ${
+                    <div className={`rounded-lg p-4 shadow-sm ${
                       message.role === 'user'
                         ? 'bg-blue-500 text-white'
-                        : 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white'
+                        : 'bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border'
                     }`}>
-                      <div className="whitespace-pre-wrap">{message.content}</div>
-                      <div className={`text-xs mt-1 opacity-70 ${
+                      <div className="whitespace-pre-wrap leading-relaxed">{message.content}</div>
+                      <div className={`text-xs mt-2 opacity-70 ${
                         message.role === 'user' ? 'text-blue-100' : 'text-gray-500'
                       }`}>
                         {message.timestamp.toLocaleTimeString()}
@@ -237,11 +268,14 @@ const Algebrain = () => {
                     <div className="w-8 h-8 rounded-full bg-gradient-to-r from-green-400 to-blue-500 flex items-center justify-center">
                       <Bot className="w-4 h-4 text-white" />
                     </div>
-                    <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-3">
-                      <div className="flex space-x-1">
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                    <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 border">
+                      <div className="flex items-center space-x-2">
+                        <div className="flex space-x-1">
+                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                        </div>
+                        <span className="text-sm text-gray-500">Algebrain is thinking...</span>
                       </div>
                     </div>
                   </div>
@@ -252,31 +286,38 @@ const Algebrain = () => {
             </div>
 
             {/* Input */}
-            <div className="border-t p-4">
-              <div className="flex space-x-2">
+            <div className="border-t p-4 bg-gray-50 dark:bg-gray-800">
+              <div className="flex space-x-3">
                 <Input
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyPress={handleKeyPress}
-                  placeholder="Ask me any math question..."
+                  placeholder="Ask me any math question... (Press Enter to send)"
                   disabled={isLoading}
-                  className="flex-1"
+                  className="flex-1 bg-white dark:bg-gray-700"
                 />
                 <Button 
                   onClick={sendMessage} 
                   disabled={isLoading || !input.trim()}
-                  className="bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600"
+                  className="bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 px-6"
                 >
-                  <Send className="w-4 h-4" />
+                  {isLoading ? (
+                    <RefreshCw className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <Send className="w-4 h-4" />
+                  )}
                 </Button>
               </div>
+              <p className="text-xs text-gray-500 mt-2 text-center">
+                Algebrain can help with algebra, calculus, geometry, and more!
+              </p>
             </div>
           </CardContent>
         </Card>
 
         {/* Features */}
         <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card>
+          <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-6 text-center">
               <Brain className="w-12 h-12 mx-auto mb-4 text-green-600" />
               <h3 className="font-semibold mb-2">Adaptive Learning</h3>
@@ -286,7 +327,7 @@ const Algebrain = () => {
             </CardContent>
           </Card>
           
-          <Card>
+          <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-6 text-center">
               <Calculator className="w-12 h-12 mx-auto mb-4 text-blue-600" />
               <h3 className="font-semibold mb-2">Step-by-Step</h3>
@@ -296,7 +337,7 @@ const Algebrain = () => {
             </CardContent>
           </Card>
           
-          <Card>
+          <Card className="hover:shadow-lg transition-shadow">
             <CardContent className="p-6 text-center">
               <Lightbulb className="w-12 h-12 mx-auto mb-4 text-yellow-600" />
               <h3 className="font-semibold mb-2">Instant Help</h3>
