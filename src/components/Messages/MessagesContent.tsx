@@ -1,10 +1,13 @@
-
 import React, { useState } from 'react';
-import { Send, Search, MoreVertical, Phone, Video, Info, Smile, Paperclip, ArrowLeft } from 'lucide-react';
+import { Send, Search, MoreVertical, Phone, Video, Info, Smile, Paperclip, ArrowLeft, Plus } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { ScrollArea } from '../ui/scroll-area';
 import { Badge } from '../ui/badge';
+import VideoCallInterface from './VideoCallInterface';
+import FileAttachment from './FileAttachment';
+import EmojiPicker from './EmojiPicker';
+import { useToast } from '../../hooks/use-toast';
 
 interface Message {
   id: string;
@@ -29,6 +32,11 @@ const MessagesContent: React.FC = () => {
   const [selectedConversation, setSelectedConversation] = useState<string | null>('1');
   const [newMessage, setNewMessage] = useState('');
   const [showMobileChat, setShowMobileChat] = useState(false);
+  const [isVideoCallActive, setIsVideoCallActive] = useState(false);
+  const [showFileAttachment, setShowFileAttachment] = useState(false);
+  const [attachedFiles, setAttachedFiles] = useState<any[]>([]);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const { toast } = useToast();
 
   const conversations: Conversation[] = [
     {
@@ -105,9 +113,18 @@ const MessagesContent: React.FC = () => {
   ];
 
   const handleSendMessage = () => {
-    if (newMessage.trim()) {
+    if (newMessage.trim() || attachedFiles.length > 0) {
       console.log('Sending message:', newMessage);
+      if (attachedFiles.length > 0) {
+        console.log('With attachments:', attachedFiles);
+        toast({
+          title: "Files sent",
+          description: `${attachedFiles.length} file(s) sent successfully`,
+        });
+      }
       setNewMessage('');
+      setAttachedFiles([]);
+      setShowFileAttachment(false);
     }
   };
 
@@ -120,10 +137,52 @@ const MessagesContent: React.FC = () => {
     setShowMobileChat(false);
   };
 
+  const handleVideoCall = () => {
+    setIsVideoCallActive(true);
+    toast({
+      title: "Video call started",
+      description: "Connecting to video call...",
+    });
+  };
+
+  const handleVoiceCall = () => {
+    toast({
+      title: "Voice call started",
+      description: "Connecting to voice call...",
+    });
+  };
+
+  const handleEndCall = () => {
+    setIsVideoCallActive(false);
+    toast({
+      title: "Call ended",
+      description: "Video call has been ended",
+    });
+  };
+
+  const handleFileSelect = (files: any[]) => {
+    setAttachedFiles(prev => [...prev, ...files]);
+  };
+
+  const handleRemoveFile = (fileId: string) => {
+    setAttachedFiles(prev => prev.filter(file => file.id !== fileId));
+  };
+
+  const handleEmojiSelect = (emoji: string) => {
+    setNewMessage(prev => prev + emoji);
+  };
+
   const selectedConv = conversations.find(c => c.id === selectedConversation);
 
   return (
     <div className="max-w-7xl mx-auto">
+      <VideoCallInterface
+        isActive={isVideoCallActive}
+        onEndCall={handleEndCall}
+        participantName={selectedConv?.name || ''}
+        participantAvatar={selectedConv?.avatar || ''}
+      />
+
       <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden h-[calc(100vh-140px)]">
         <div className="flex h-full">
           {/* Conversations List - Desktop always visible, Mobile conditionally hidden */}
@@ -225,10 +284,20 @@ const MessagesContent: React.FC = () => {
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <Button variant="ghost" size="icon" className="rounded-full hover:bg-blue-50 dark:hover:bg-blue-900/20">
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="rounded-full hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                      onClick={handleVoiceCall}
+                    >
                       <Phone className="w-5 h-5 text-blue-600" />
                     </Button>
-                    <Button variant="ghost" size="icon" className="rounded-full hover:bg-blue-50 dark:hover:bg-blue-900/20">
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="rounded-full hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                      onClick={handleVideoCall}
+                    >
                       <Video className="w-5 h-5 text-blue-600" />
                     </Button>
                     <Button variant="ghost" size="icon" className="rounded-full hover:bg-gray-50 dark:hover:bg-gray-800">
@@ -236,6 +305,17 @@ const MessagesContent: React.FC = () => {
                     </Button>
                   </div>
                 </div>
+
+                {/* File Attachment Panel */}
+                {showFileAttachment && (
+                  <div className="p-4 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+                    <FileAttachment
+                      onFileSelect={handleFileSelect}
+                      attachedFiles={attachedFiles}
+                      onRemoveFile={handleRemoveFile}
+                    />
+                  </div>
+                )}
 
                 {/* Enhanced Messages Area */}
                 <ScrollArea className="flex-1 p-6 bg-gradient-to-b from-gray-50/50 to-white dark:from-gray-800/50 dark:to-gray-900">
@@ -277,7 +357,12 @@ const MessagesContent: React.FC = () => {
                 {/* Enhanced Message Input */}
                 <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
                   <div className="flex items-center space-x-3">
-                    <Button variant="ghost" size="icon" className="rounded-full text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="rounded-full text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                      onClick={() => setShowFileAttachment(!showFileAttachment)}
+                    >
                       <Paperclip className="w-5 h-5" />
                     </Button>
                     <div className="flex-1 relative">
@@ -288,13 +373,21 @@ const MessagesContent: React.FC = () => {
                         onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                         className="pr-12 rounded-full border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="absolute right-2 top-1/2 transform -translate-y-1/2 rounded-full text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
-                      >
-                        <Smile className="w-5 h-5" />
-                      </Button>
+                      <div className="absolute right-2 top-1/2 transform -translate-y-1/2">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="rounded-full text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                          onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                        >
+                          <Smile className="w-5 h-5" />
+                        </Button>
+                        <EmojiPicker
+                          isOpen={showEmojiPicker}
+                          onEmojiSelect={handleEmojiSelect}
+                          onClose={() => setShowEmojiPicker(false)}
+                        />
+                      </div>
                     </div>
                     <Button 
                       onClick={handleSendMessage} 
