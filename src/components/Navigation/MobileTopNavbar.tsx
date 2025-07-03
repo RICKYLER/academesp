@@ -2,11 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Bell, Menu, X, MessageCircle, Users, Home, User, Plus } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { useProfile } from '../../contexts/ProfileContext';
 import { WalletConnect } from '../WalletConnect';
 
 const MobileTopNavbar: React.FC = () => {
-  const { profileName } = useProfile();
+  const { profileName, profileImage } = useProfile();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -118,9 +119,12 @@ const MobileTopNavbar: React.FC = () => {
             {/* Menu Header */}
             <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white font-semibold">
-                  {profileName.split(' ').map(n => n[0]).join('')}
-                </div>
+                <Avatar className="w-10 h-10">
+                  <AvatarImage src={profileImage} alt="Profile" />
+                  <AvatarFallback className="bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold">
+                    {profileName.split(' ').map(n => n[0]).join('')}
+                  </AvatarFallback>
+                </Avatar>
                 <div>
                   <h3 className="font-semibold text-gray-900 dark:text-white">{profileName}</h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400">View your profile</p>

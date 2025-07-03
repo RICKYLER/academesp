@@ -2,6 +2,7 @@
 import React from 'react';
 import { User, Users, MessageCircle, Bell, Bookmark, UserCheck } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { useProfile } from '../../contexts/ProfileContext';
 
 const menuItems = [
@@ -21,7 +22,7 @@ const suggestedConnections = [
 ];
 
 const LeftSidebar: React.FC = () => {
-  const { profileName } = useProfile();
+  const { profileName, profileImage } = useProfile();
   const location = useLocation();
   const currentPath = location.pathname;
 
@@ -30,9 +31,12 @@ const LeftSidebar: React.FC = () => {
       {/* Profile Card */}
       <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl p-4 mb-6 text-white">
         <div className="flex items-center space-x-3">
-          <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
-            <User className="w-6 h-6" />
-          </div>
+          <Avatar className="w-12 h-12 border-2 border-white/30">
+            <AvatarImage src={profileImage} alt="Profile" />
+            <AvatarFallback className="bg-white/20 text-white">
+              {profileName.split(' ').map(n => n[0]).join('')}
+            </AvatarFallback>
+          </Avatar>
           <div>
             <h3 className="font-semibold">{profileName}</h3>
             <p className="text-sm opacity-90">Computer Science, MIT</p>
