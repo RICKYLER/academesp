@@ -57,43 +57,53 @@ const Algebrain = () => {
     };
 
     setMessages(prev => [...prev, userMessage]);
+    const currentInput = input;
     setInput('');
     setIsLoading(true);
 
     try {
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      console.log('Sending request to Venice AI with input:', currentInput);
+      
+      const response = await fetch('https://api.venice.ai/api/inference', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer tP6HprDuSNfa5ERPX1YlLE4PtsmJpG4k-jVNE23lPF`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'gpt-3.5-turbo',
+          model: 'llama-3.1-8b-instruct',
           messages: [
             {
               role: 'system',
-              content: 'You are Algebrain, an expert AI math tutor. Help students understand mathematical concepts by providing clear, step-by-step explanations. Always be encouraging and patient. Format your responses to be educational and easy to follow.'
+              content: 'You are Algebrain, an expert AI math tutor. Help students understand mathematical concepts by providing clear, step-by-step explanations. Always be encouraging and patient. Format your responses to be educational and easy to follow. Focus on mathematics, algebra, calculus, geometry, and related topics.'
             },
             ...messages.map(msg => ({
-              role: msg.role,
+              role: msg.role === 'assistant' ? 'assistant' : 'user',
               content: msg.content
             })),
             {
               role: 'user',
-              content: input
+              content: currentInput
             }
           ],
           max_tokens: 1000,
           temperature: 0.7,
+          stream: false
         }),
       });
 
+      console.log('Response status:', response.status);
+      
       if (!response.ok) {
-        throw new Error('Failed to get response from AI');
+        const errorText = await response.text();
+        console.error('API Error:', errorText);
+        throw new Error(`API request failed with status ${response.status}: ${errorText}`);
       }
 
       const data = await response.json();
-      const aiResponse = data.choices[0]?.message?.content || 'Sorry, I couldn\'t process that request.';
+      console.log('API Response:', data);
+      
+      const aiResponse = data.choices?.[0]?.message?.content || data.message?.content || 'Sorry, I couldn\'t process that request.';
 
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
@@ -107,9 +117,18 @@ const Algebrain = () => {
       console.error('Error:', error);
       toast({
         title: 'Error',
-        description: 'Failed to get response from Algebrain. Please try again.',
+        description: 'Failed to get response from Algebrain. Please check the console for details.',
         variant: 'destructive',
       });
+      
+      // Add error message to chat
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: 'Sorry, I\'m having trouble connecting right now. Please try again in a moment.',
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
     }
@@ -136,7 +155,7 @@ const Algebrain = () => {
             Algebrain
           </h1>
           <p className="text-lg text-gray-600 dark:text-gray-300">
-            Your AI-powered math tutor that adapts to your learning style
+            Your AI-powered math tutor powered by Venice AI
           </p>
         </div>
 
