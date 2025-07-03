@@ -3,6 +3,7 @@ import { Heart, MessageCircle, Share2, Bookmark, MoreHorizontal, Send } from 'lu
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { useBookmarks } from '../../contexts/BookmarkContext';
 
 interface Comment {
   id: number;
@@ -85,6 +86,7 @@ const NewsFeed: React.FC = () => {
   const [newComments, setNewComments] = useState<{ [key: number]: string }>({});
   const [showComments, setShowComments] = useState<{ [key: number]: boolean }>({});
   const { toast } = useToast();
+  const { addBookmark, removeBookmark, isBookmarked } = useBookmarks();
 
   const handleLike = (postId: number) => {
     setPosts(prevPosts =>
@@ -105,6 +107,22 @@ const NewsFeed: React.FC = () => {
         : "Post liked!",
       duration: 2000,
     });
+  };
+
+  const handleBookmark = (post: Post) => {
+    if (isBookmarked(post.id)) {
+      removeBookmark(post.id);
+      toast({
+        description: "Bookmark removed",
+        duration: 2000,
+      });
+    } else {
+      addBookmark(post);
+      toast({
+        description: "Post bookmarked!",
+        duration: 2000,
+      });
+    }
   };
 
   const handleComment = (postId: number) => {
@@ -209,8 +227,15 @@ const NewsFeed: React.FC = () => {
               </button>
             </div>
             
-            <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors">
-              <Bookmark className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+            <button 
+              onClick={() => handleBookmark(post)}
+              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
+            >
+              <Bookmark className={`w-5 h-5 ${
+                isBookmarked(post.id) 
+                  ? 'text-blue-500 dark:text-blue-400 fill-current' 
+                  : 'text-gray-500 dark:text-gray-400'
+              }`} />
             </button>
           </div>
 
