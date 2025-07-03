@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Smile, Heart, Laugh, Angry, Frown, AlertCircle, Search } from 'lucide-react';
+import { Smile, Heart, Laugh, Angry, Frown, AlertCircle, Search, X } from 'lucide-react';
 import { Button } from '../ui/button';
 import { ScrollArea } from '../ui/scroll-area';
 import { Input } from '../ui/input';
@@ -56,93 +56,119 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({ onEmojiSelect, isOpen, onClos
 
   const filteredEmojis = searchTerm
     ? emojiCategories[selectedCategory as keyof typeof emojiCategories].emojis.filter(emoji =>
-        emoji.includes(searchTerm) // Simple search, could be enhanced with emoji names
+        emoji.includes(searchTerm)
       )
     : emojiCategories[selectedCategory as keyof typeof emojiCategories].emojis;
 
   if (!isOpen) return null;
 
   return (
-    <div className="absolute bottom-full left-0 mb-2 w-96 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-200/50 dark:border-gray-700/50 z-50 animate-scale-in">
-      {/* Enhanced Header with Gradient */}
-      <div className="p-4 border-b border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-r from-blue-50/50 to-purple-50/50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-t-2xl">
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Emojis</h3>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-          >
-            ✕
-          </button>
-        </div>
-        
-        {/* Enhanced Search Bar */}
-        <div className="relative mb-4">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-          <Input
-            placeholder="Search emojis..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 bg-white/80 dark:bg-gray-800/80 border-gray-200/50 dark:border-gray-600/50 rounded-xl focus:ring-2 focus:ring-blue-500/50 backdrop-blur-sm transition-all"
-          />
-        </div>
-
-        {/* Enhanced Category Tabs */}
-        <div className="flex space-x-2 overflow-x-auto scrollbar-hide">
-          {Object.entries(emojiCategories).map(([key, category]) => (
-            <Button
-              key={key}
-              variant="ghost"
-              size="sm"
-              onClick={() => setSelectedCategory(key)}
-              className={`flex-shrink-0 rounded-xl px-4 py-2 transition-all duration-200 hover:scale-105 ${
-                selectedCategory === key
-                  ? `bg-gradient-to-r ${category.color} text-white shadow-lg transform scale-105`
-                  : 'hover:bg-gray-100 dark:hover:bg-gray-800/50'
-              }`}
-            >
-              <div className="flex items-center space-x-2">
-                {category.icon}
-                <span className="text-xs font-medium hidden sm:block">{category.name.split(' ')[0]}</span>
-              </div>
-            </Button>
-          ))}
-        </div>
-      </div>
+    <div className="fixed inset-0 z-50 flex items-end justify-center md:relative md:inset-auto md:flex md:items-start md:justify-start">
+      {/* Mobile Overlay */}
+      <div 
+        className="absolute inset-0 bg-black/50 backdrop-blur-sm md:hidden"
+        onClick={onClose}
+      />
       
-      {/* Enhanced Emoji Grid */}
-      <ScrollArea className="h-72 p-4">
-        <div className="grid grid-cols-10 gap-1">
-          {filteredEmojis.map((emoji, index) => (
+      {/* Emoji Picker Container */}
+      <div className="relative w-full max-w-md mx-4 mb-4 md:mx-0 md:mb-0 md:absolute md:bottom-full md:left-0 md:mb-2 md:w-96 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-t-3xl md:rounded-3xl shadow-2xl border border-gray-200/50 dark:border-gray-700/50 animate-scale-in">
+        {/* Enhanced Header */}
+        <div className="p-6 border-b border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-r from-blue-50/80 via-purple-50/60 to-pink-50/40 dark:from-blue-900/30 dark:via-purple-900/20 dark:to-pink-900/10 rounded-t-3xl md:rounded-t-3xl backdrop-blur-sm">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+              Emojis
+            </h3>
             <Button
-              key={index}
+              onClick={onClose}
               variant="ghost"
-              size="sm"
-              onClick={() => {
-                onEmojiSelect(emoji);
-                onClose();
-              }}
-              className="h-10 w-10 p-0 text-xl hover:bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 hover:scale-125 transition-all duration-200 rounded-xl border border-transparent hover:border-blue-200/50 dark:hover:border-blue-700/50 hover:shadow-lg"
+              size="icon"
+              className="rounded-full text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100/50 dark:hover:bg-gray-800/50 transition-all hover:scale-110"
             >
-              <span className="filter hover:drop-shadow-lg">{emoji}</span>
+              <X className="w-5 h-5" />
             </Button>
-          ))}
+          </div>
+          
+          {/* Enhanced Search Bar */}
+          <div className="relative mb-4">
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <Input
+              placeholder="Search emojis..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-12 pr-4 py-3 bg-white/90 dark:bg-gray-800/90 border-gray-200/50 dark:border-gray-600/50 rounded-2xl focus:ring-2 focus:ring-blue-500/50 focus:border-transparent backdrop-blur-sm transition-all shadow-sm hover:shadow-md text-sm"
+            />
+          </div>
+
+          {/* Enhanced Category Tabs */}
+          <div className="flex space-x-1 overflow-x-auto scrollbar-hide pb-2">
+            {Object.entries(emojiCategories).map(([key, category]) => (
+              <Button
+                key={key}
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  setSelectedCategory(key);
+                  setSearchTerm('');
+                }}
+                className={`flex-shrink-0 rounded-xl px-4 py-2 transition-all duration-300 hover:scale-105 relative overflow-hidden ${
+                  selectedCategory === key
+                    ? `bg-gradient-to-r ${category.color} text-white shadow-lg transform scale-105 font-semibold`
+                    : 'hover:bg-white/60 dark:hover:bg-gray-800/60 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'
+                }`}
+              >
+                <div className="flex items-center space-x-2">
+                  <div className={selectedCategory === key ? 'filter brightness-0 invert' : ''}>
+                    {category.icon}
+                  </div>
+                  <span className="text-xs font-medium hidden sm:block truncate max-w-[60px]">
+                    {category.name.split(' ')[0]}
+                  </span>
+                </div>
+                {selectedCategory === key && (
+                  <div className="absolute inset-0 bg-white/20 rounded-xl"></div>
+                )}
+              </Button>
+            ))}
+          </div>
         </div>
         
-        {filteredEmojis.length === 0 && searchTerm && (
-          <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-            <div className="text-4xl mb-2">🔍</div>
-            <p className="text-sm">No emojis found</p>
-            <p className="text-xs">Try a different search term</p>
+        {/* Enhanced Emoji Grid */}
+        <ScrollArea className="h-80 p-4">
+          <div className="grid grid-cols-8 gap-2">
+            {filteredEmojis.map((emoji, index) => (
+              <Button
+                key={index}
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  onEmojiSelect(emoji);
+                  onClose();
+                }}
+                className="h-12 w-12 p-0 text-2xl hover:bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-blue-900/20 dark:via-purple-900/20 dark:to-pink-900/20 hover:scale-125 transition-all duration-200 rounded-xl border border-transparent hover:border-blue-200/50 dark:hover:border-blue-700/50 hover:shadow-lg relative group"
+              >
+                <span className="filter group-hover:drop-shadow-lg transition-all duration-200 group-hover:scale-110">
+                  {emoji}
+                </span>
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
+              </Button>
+            ))}
           </div>
-        )}
-      </ScrollArea>
+          
+          {filteredEmojis.length === 0 && searchTerm && (
+            <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+              <div className="text-6xl mb-4 opacity-50">🔍</div>
+              <h4 className="text-lg font-semibold mb-2">No emojis found</h4>
+              <p className="text-sm">Try a different search term or browse categories</p>
+            </div>
+          )}
+        </ScrollArea>
 
-      {/* Enhanced Footer */}
-      <div className="px-4 py-3 bg-gradient-to-r from-gray-50/50 to-blue-50/50 dark:from-gray-800/50 dark:to-blue-900/20 rounded-b-2xl border-t border-gray-200/50 dark:border-gray-700/50">
-        <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
-          Click any emoji to add it to your message
-        </p>
+        {/* Enhanced Footer */}
+        <div className="px-6 py-4 bg-gradient-to-r from-gray-50/80 via-blue-50/40 to-purple-50/20 dark:from-gray-800/80 dark:via-blue-900/20 dark:to-purple-900/10 rounded-b-3xl border-t border-gray-200/50 dark:border-gray-700/50 backdrop-blur-sm">
+          <p className="text-xs text-gray-500 dark:text-gray-400 text-center font-medium">
+            Click any emoji to add it to your message • {filteredEmojis.length} emojis
+          </p>
+        </div>
       </div>
     </div>
   );

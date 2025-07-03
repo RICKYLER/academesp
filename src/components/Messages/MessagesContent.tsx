@@ -125,6 +125,7 @@ const MessagesContent: React.FC = () => {
       setNewMessage('');
       setAttachedFiles([]);
       setShowFileAttachment(false);
+      setShowEmojiPicker(false);
     }
   };
 
@@ -183,34 +184,34 @@ const MessagesContent: React.FC = () => {
         participantAvatar={selectedConv?.avatar || ''}
       />
 
-      <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden h-[calc(100vh-140px)] animate-fade-in">
+      <div className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-2xl rounded-3xl shadow-2xl border border-gray-200/30 dark:border-gray-700/30 overflow-hidden h-[calc(100vh-140px)] animate-fade-in">
         <div className="flex h-full">
           {/* Enhanced Conversations List */}
-          <div className={`w-full md:w-80 border-r border-gray-200/50 dark:border-gray-700/50 flex flex-col bg-gradient-to-b from-gray-50/50 via-blue-50/20 to-purple-50/20 dark:from-gray-800/50 dark:via-blue-900/10 dark:to-purple-900/10 ${showMobileChat ? 'hidden md:flex' : 'flex'}`}>
+          <div className={`w-full md:w-80 border-r border-gray-200/30 dark:border-gray-700/30 flex flex-col bg-gradient-to-b from-gray-50/80 via-blue-50/30 to-purple-50/20 dark:from-gray-800/80 dark:via-blue-900/20 dark:to-purple-900/10 backdrop-blur-sm ${showMobileChat ? 'hidden md:flex' : 'flex'}`}>
             {/* Enhanced Header */}
-            <div className="p-6 border-b border-gray-200/50 dark:border-gray-700/50 bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm">
+            <div className="p-6 border-b border-gray-200/30 dark:border-gray-700/30 bg-white/70 dark:bg-gray-900/70 backdrop-blur-lg">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center shadow-lg">
+                <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-2xl bg-gradient-to-r from-blue-500 via-purple-600 to-pink-500 flex items-center justify-center shadow-lg">
                     <span className="text-white text-sm font-bold">M</span>
                   </div>
                   Messages
                 </h2>
-                <Button variant="ghost" size="icon" className="rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20">
+                <Button variant="ghost" size="icon" className="rounded-xl hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 transition-all hover:scale-110">
                   <Plus className="w-5 h-5 text-blue-600" />
                 </Button>
               </div>
               
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                 <Input
                   placeholder="Search conversations..."
-                  className="pl-10 bg-white/80 dark:bg-gray-800/80 border-gray-200/50 dark:border-gray-600/50 focus:ring-2 focus:ring-blue-500/50 rounded-xl backdrop-blur-sm transition-all"
+                  className="pl-12 bg-white/90 dark:bg-gray-800/90 border-gray-200/30 dark:border-gray-600/30 focus:ring-2 focus:ring-blue-500/30 focus:border-transparent rounded-2xl backdrop-blur-sm transition-all shadow-sm hover:shadow-md"
                 />
               </div>
             </div>
 
-            {/* Enhanced Conversations with animations */}
+            {/* Enhanced Conversations */}
             <ScrollArea className="flex-1">
               <div className="p-3 space-y-2">
                 {conversations.map((conversation, index) => (
@@ -219,24 +220,20 @@ const MessagesContent: React.FC = () => {
                     onClick={() => handleConversationSelect(conversation.id)}
                     className={`p-4 rounded-2xl cursor-pointer transition-all duration-300 group relative overflow-hidden animate-fade-in hover:scale-[1.02] ${
                       selectedConversation === conversation.id
-                        ? 'bg-white/90 dark:bg-gray-900/90 shadow-xl border border-blue-200/50 dark:border-blue-800/50 transform scale-[1.02] backdrop-blur-lg'
-                        : 'hover:bg-white/60 dark:hover:bg-gray-800/60 hover:shadow-lg backdrop-blur-sm'
+                        ? 'bg-white/95 dark:bg-gray-800/95 shadow-xl border border-blue-200/50 dark:border-blue-800/50 transform scale-[1.02] backdrop-blur-lg'
+                        : 'hover:bg-white/70 dark:hover:bg-gray-800/70 hover:shadow-lg backdrop-blur-sm'
                     }`}
                     style={{ 
                       animationDelay: `${index * 0.1}s`,
-                      background: selectedConversation === conversation.id 
-                        ? 'linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(248,250,252,0.8) 100%)' 
-                        : undefined
                     }}
                   >
-                    {/* Subtle gradient overlay for selected item */}
                     {selectedConversation === conversation.id && (
-                      <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5 rounded-2xl"></div>
+                      <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-pink-500/5 rounded-2xl"></div>
                     )}
                     
                     <div className="flex items-start space-x-3 relative z-10">
                       <div className="relative">
-                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 flex items-center justify-center text-white text-sm font-bold shadow-lg hover:shadow-xl transition-shadow">
+                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 flex items-center justify-center text-white text-sm font-bold shadow-lg hover:shadow-xl transition-all">
                           {conversation.avatar}
                         </div>
                         {conversation.isOnline && (
@@ -275,13 +272,13 @@ const MessagesContent: React.FC = () => {
           <div className={`flex-1 flex flex-col ${!showMobileChat ? 'hidden md:flex' : 'flex'}`}>
             {selectedConversation && selectedConv ? (
               <>
-                {/* Enhanced Chat Header with gradient */}
-                <div className="p-4 border-b border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-r from-white/80 via-blue-50/30 to-purple-50/30 dark:from-gray-900/80 dark:via-blue-900/10 dark:to-purple-900/10 backdrop-blur-sm flex items-center justify-between">
+                {/* Enhanced Chat Header */}
+                <div className="p-5 border-b border-gray-200/30 dark:border-gray-700/30 bg-gradient-to-r from-white/90 via-blue-50/40 to-purple-50/30 dark:from-gray-900/90 dark:via-blue-900/20 dark:to-purple-900/10 backdrop-blur-lg flex items-center justify-between">
                   <div className="flex items-center space-x-4">
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="md:hidden rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                      className="md:hidden rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all hover:scale-110"
                       onClick={handleBackToList}
                     >
                       <ArrowLeft className="w-5 h-5" />
@@ -334,7 +331,7 @@ const MessagesContent: React.FC = () => {
 
                 {/* Enhanced File Attachment Panel */}
                 {showFileAttachment && (
-                  <div className="p-4 bg-gradient-to-r from-gray-50/80 to-blue-50/40 dark:from-gray-800/80 dark:to-blue-900/20 border-b border-gray-200/50 dark:border-gray-700/50 backdrop-blur-sm animate-fade-in">
+                  <div className="p-4 bg-gradient-to-r from-gray-50/90 to-blue-50/50 dark:from-gray-800/90 dark:to-blue-900/30 border-b border-gray-200/30 dark:border-gray-700/30 backdrop-blur-sm animate-fade-in">
                     <FileAttachment
                       onFileSelect={handleFileSelect}
                       attachedFiles={attachedFiles}
@@ -343,8 +340,8 @@ const MessagesContent: React.FC = () => {
                   </div>
                 )}
 
-                {/* Enhanced Messages Area with better gradients */}
-                <ScrollArea className="flex-1 p-6 bg-gradient-to-br from-gray-50/30 via-blue-50/10 to-purple-50/10 dark:from-gray-800/30 dark:via-blue-900/5 dark:to-purple-900/5">
+                {/* Enhanced Messages Area */}
+                <ScrollArea className="flex-1 p-6 bg-gradient-to-br from-gray-50/40 via-blue-50/20 to-purple-50/10 dark:from-gray-800/40 dark:via-blue-900/10 dark:to-purple-900/5 backdrop-blur-sm">
                   <div className="space-y-6">
                     {messages.map((message, index) => (
                       <div
@@ -354,24 +351,27 @@ const MessagesContent: React.FC = () => {
                       >
                         <div className={`max-w-xs lg:max-w-md relative group ${message.isMe ? 'order-2' : 'order-1'}`}>
                           <div
-                            className={`px-5 py-3 rounded-2xl shadow-lg backdrop-blur-sm transition-all duration-200 hover:shadow-xl ${
+                            className={`px-5 py-4 rounded-3xl shadow-lg backdrop-blur-sm transition-all duration-300 hover:shadow-xl relative overflow-hidden ${
                               message.isMe
-                                ? 'bg-gradient-to-r from-blue-500 via-blue-600 to-purple-600 text-white rounded-br-md transform hover:scale-[1.02]'
-                                : 'bg-white/90 dark:bg-gray-800/90 text-gray-900 dark:text-white border border-gray-200/50 dark:border-gray-700/30 rounded-bl-md hover:bg-white dark:hover:bg-gray-800'
+                                ? 'bg-gradient-to-r from-blue-500 via-blue-600 to-purple-600 text-white rounded-br-lg transform hover:scale-[1.02] shadow-blue-500/25'
+                                : 'bg-white/95 dark:bg-gray-800/95 text-gray-900 dark:text-white border border-gray-200/30 dark:border-gray-700/30 rounded-bl-lg hover:bg-white dark:hover:bg-gray-800 shadow-gray-500/10'
                             }`}
                           >
-                            <p className="text-sm leading-relaxed">{message.content}</p>
+                            {message.isMe && (
+                              <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 via-purple-500/20 to-pink-500/20 rounded-3xl"></div>
+                            )}
+                            <p className="text-sm leading-relaxed relative z-10 font-medium">{message.content}</p>
                           </div>
                           <div className={`flex items-center mt-2 space-x-2 ${message.isMe ? 'justify-end' : 'justify-start'}`}>
                             <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">
                               {message.timestamp}
                             </span>
                             {message.isMe && message.status && (
-                              <div className={`text-xs font-medium ${
+                              <div className={`text-xs font-medium flex ${''}items-center ${
                                 message.status === 'read' ? 'text-blue-500' :
                                 message.status === 'delivered' ? 'text-gray-400' : 'text-gray-300'
                               }`}>
-                                ✓✓
+                                <span className="text-lg leading-none">✓✓</span>
                               </div>
                             )}
                           </div>
@@ -381,9 +381,9 @@ const MessagesContent: React.FC = () => {
                   </div>
                 </ScrollArea>
 
-                {/* Enhanced Message Input with better styling */}
-                <div className="p-4 border-t border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-r from-white/80 via-blue-50/30 to-purple-50/30 dark:from-gray-900/80 dark:via-blue-900/10 dark:to-purple-900/10 backdrop-blur-sm">
-                  <div className="flex items-center space-x-3">
+                {/* Enhanced Message Input */}
+                <div className="p-5 border-t border-gray-200/30 dark:border-gray-700/30 bg-gradient-to-r from-white/90 via-blue-50/40 to-purple-50/30 dark:from-gray-900/90 dark:via-blue-900/20 dark:to-purple-900/10 backdrop-blur-lg relative">
+                  <div className="flex items-end space-x-3">
                     <Button 
                       variant="ghost" 
                       size="icon" 
@@ -399,7 +399,7 @@ const MessagesContent: React.FC = () => {
                         value={newMessage}
                         onChange={(e) => setNewMessage(e.target.value)}
                         onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                        className="pr-12 rounded-2xl border-gray-300/50 dark:border-gray-600/50 focus:ring-2 focus:ring-blue-500/50 focus:border-transparent bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm transition-all shadow-sm hover:shadow-md"
+                        className="pr-12 py-3 rounded-3xl border-gray-300/30 dark:border-gray-600/30 focus:ring-2 focus:ring-blue-500/30 focus:border-transparent bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm transition-all shadow-sm hover:shadow-md text-sm"
                       />
                       <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                         <Button
@@ -410,25 +410,29 @@ const MessagesContent: React.FC = () => {
                         >
                           <Smile className="w-5 h-5" />
                         </Button>
-                        <EmojiPicker
-                          isOpen={showEmojiPicker}
-                          onEmojiSelect={handleEmojiSelect}
-                          onClose={() => setShowEmojiPicker(false)}
-                        />
                       </div>
                     </div>
                     
                     <Button 
                       onClick={handleSendMessage} 
                       size="icon"
-                      className="rounded-full bg-gradient-to-r from-blue-500 via-blue-600 to-purple-600 hover:from-blue-600 hover:via-blue-700 hover:to-purple-700 shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-200"
+                      className="rounded-full bg-gradient-to-r from-blue-500 via-blue-600 to-purple-600 hover:from-blue-600 hover:via-blue-700 hover:to-purple-700 shadow-xl hover:shadow-2xl hover:scale-110 transition-all duration-300 p-3"
+                      disabled={!newMessage.trim() && attachedFiles.length === 0}
                     >
                       <Send className="w-5 h-5" />
                     </Button>
                   </div>
+                  
+                  {/* Emoji Picker */}
+                  <EmojiPicker
+                    isOpen={showEmojiPicker}
+                    onEmojiSelect={handleEmojiSelect}
+                    onClose={() => setShowEmojiPicker(false)}
+                  />
                 </div>
               </>
             ) : (
+              // ... keep existing code (empty state)
               <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-gray-50/50 via-blue-50/20 to-purple-50/20 dark:from-gray-800/50 dark:via-blue-900/10 dark:to-purple-900/10">
                 <div className="text-center text-gray-500 dark:text-gray-400 max-w-md animate-fade-in">
                   <div className="w-24 h-24 bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100 dark:from-blue-900/20 dark:via-purple-900/20 dark:to-pink-900/20 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg">
