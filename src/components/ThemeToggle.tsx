@@ -1,15 +1,15 @@
+
 import React from 'react';
+import { useTheme } from '../contexts/ThemeContext';
 
-interface ThemeToggleProps {
-  isDark: boolean;
-  onToggle: () => void;
-}
+const ThemeToggle: React.FC = () => {
+  const { theme, toggleTheme } = useTheme();
+  const isDark = theme === 'dark';
 
-const ThemeToggle: React.FC<ThemeToggleProps> = ({ isDark, onToggle }) => {
   return (
     <div 
       className={`tdnn ${isDark ? '' : 'day'}`}
-      onClick={onToggle}
+      onClick={toggleTheme}
       style={{ cursor: 'pointer' }}
     >
       <div className={`moon ${isDark ? '' : 'sun'}`}></div>
@@ -17,4 +17,4 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ isDark, onToggle }) => {
   );
 };
 
-export default ThemeToggle; 
+export default ThemeToggle;
