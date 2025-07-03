@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useEthereumWallet } from '../../hooks/useEthereumWallet';
 import { useProfile } from '../../contexts/ProfileContext';
+import ThemeToggle from '../ThemeToggle';
+import '../ThemeToggle.css';
 
 const TopNavbar: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
@@ -88,12 +90,12 @@ const TopNavbar: React.FC = () => {
           </Link>
 
           {/* Theme Toggle */}
-          <button 
-            onClick={toggleTheme} 
-            className="px-3 py-1 text-xs bg-gray-200 dark:bg-gray-700 rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-          >
-            {theme === 'light' ? '🌙' : '☀️'}
-          </button>
+          <div className="flex items-center">
+            <ThemeToggle 
+              isDark={theme === 'dark'} 
+              onToggle={toggleTheme} 
+            />
+          </div>
         </div>
       </div>
     </nav>

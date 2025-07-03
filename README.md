@@ -1,4 +1,3 @@
-
 # AcademeSpace - Educational Social Platform
 
 Welcome to AcademeSpace, the ultimate social platform designed specifically for students and educators to connect, collaborate, and grow together.
@@ -120,6 +119,6 @@ We're constantly working to improve AcademeSpace. Here's what's coming next:
 
 ---
 
-**Built with ❤️ by students, for students.**
+**Built by students, for students, with a passion for learning and collaboration.**
 
 *Empowering academic collaboration and growth through technology.*
