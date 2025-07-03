@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ProfileProvider } from "./contexts/ProfileContext";
 import { WalletProvider } from "./contexts/WalletProvider";
 import { BookmarkProvider } from "./contexts/BookmarkContext";
+import { ThemeProvider } from "./contexts/ThemeContext";
 import Index from "./pages/Index";
 import Profile from "./pages/Profile";
 import StudyGroups from "./pages/StudyGroups";
@@ -17,30 +18,32 @@ import Bookmarks from "./pages/Bookmarks";
 import NotFound from "./pages/NotFound";
 
 const App = () => (
-  <WalletProvider>
-    <TooltipProvider>
-      <ProfileProvider>
-        <BookmarkProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/study-groups" element={<StudyGroups />} />
-              <Route path="/messages" element={<Messages />} />
-              <Route path="/create" element={<Create />} />
-              <Route path="/wallet-demo" element={<WalletDemo />} />
-              <Route path="/algebrain" element={<Algebrain />} />
-              <Route path="/bookmarks" element={<Bookmarks />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </BookmarkProvider>
-      </ProfileProvider>
-    </TooltipProvider>
-  </WalletProvider>
+  <ThemeProvider>
+    <WalletProvider>
+      <TooltipProvider>
+        <ProfileProvider>
+          <BookmarkProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/study-groups" element={<StudyGroups />} />
+                <Route path="/messages" element={<Messages />} />
+                <Route path="/create" element={<Create />} />
+                <Route path="/wallet-demo" element={<WalletDemo />} />
+                <Route path="/algebrain" element={<Algebrain />} />
+                <Route path="/bookmarks" element={<Bookmarks />} />
+                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </BookmarkProvider>
+        </ProfileProvider>
+      </TooltipProvider>
+    </WalletProvider>
+  </ThemeProvider>
 );
 
 export default App;
