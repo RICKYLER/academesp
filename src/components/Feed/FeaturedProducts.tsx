@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Brain, Users, Trophy } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const products = [
   {
@@ -9,7 +10,8 @@ const products = [
     description: 'AI-powered math tutor that adapts to your learning style',
     icon: Brain,
     color: 'from-green-400 to-blue-500',
-    tag: 'AI Tutor'
+    tag: 'AI Tutor',
+    path: '/algebrain'
   },
   {
     id: 2,
@@ -17,7 +19,8 @@ const products = [
     description: 'Find perfect study partners in your area',
     icon: Users,
     color: 'from-purple-400 to-pink-500',
-    tag: 'Social Learning'
+    tag: 'Social Learning',
+    path: '/study-groups'
   },
   {
     id: 3,
@@ -25,7 +28,8 @@ const products = [
     description: 'Earn unique NFTs for academic achievements',
     icon: Trophy,
     color: 'from-yellow-400 to-orange-500',
-    tag: 'Rewards'
+    tag: 'Rewards',
+    path: '/create'
   }
 ];
 
@@ -38,9 +42,10 @@ const FeaturedProducts: React.FC = () => {
       
       <div className="grid grid-cols-1 gap-4">
         {products.map((product) => (
-          <div
+          <Link
             key={product.id}
-            className="group cursor-pointer border border-gray-100 dark:border-gray-700 rounded-lg p-4 hover:shadow-lg dark:hover:shadow-xl hover:shadow-blue-100 dark:hover:shadow-blue-900/20 transition-all duration-300"
+            to={product.path}
+            className="group cursor-pointer border border-gray-100 dark:border-gray-700 rounded-lg p-4 hover:shadow-lg dark:hover:shadow-xl hover:shadow-blue-100 dark:hover:shadow-blue-900/20 transition-all duration-300 block"
           >
             <div className="flex items-start space-x-4">
               <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${product.color} flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300`}>
@@ -59,12 +64,12 @@ const FeaturedProducts: React.FC = () => {
                 <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
                   {product.description}
                 </p>
-                <button className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors">
-                  Explore →
-                </button>
+                <span className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors">
+                  {product.name === 'Algebrain' ? 'Launch AI Tutor' : 'Explore'} →
+                </span>
               </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
