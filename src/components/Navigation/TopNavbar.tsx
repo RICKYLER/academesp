@@ -1,11 +1,10 @@
-
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Menu, Search, MessageSquare, Settings, LogOut, User, Home, Users, BookOpen, Wallet, Star } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { useTheme } from '../../contexts/ThemeContext';
-import { ThemeToggle } from '../ThemeToggle';
+import ThemeToggle from '../ThemeToggle';
 import NotificationDropdown from './NotificationDropdown';
 
 const TopNavbar: React.FC = () => {

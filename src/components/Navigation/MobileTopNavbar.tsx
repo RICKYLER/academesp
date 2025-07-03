@@ -1,10 +1,9 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, Search, X, User, Settings, LogOut } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
-import { ThemeToggle } from '../ThemeToggle';
+import ThemeToggle from '../ThemeToggle';
 import NotificationDropdown from './NotificationDropdown';
 
 const MobileTopNavbar: React.FC = () => {
