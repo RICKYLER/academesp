@@ -1,4 +1,6 @@
+
 import React from 'react';
+import './ThemeToggle.css';
 
 interface ThemeToggleProps {
   isDark: boolean;
@@ -17,4 +19,4 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ isDark, onToggle }) => {
   );
 };
 
-export default ThemeToggle; 
+export default ThemeToggle;
