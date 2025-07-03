@@ -26,12 +26,21 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) =>
   const [profileImage, setProfileImage] = useState('/placeholder.svg');
 
   const updateProfile = (name: string, image: string) => {
+    console.log('Updating profile:', { name, image }); // Debug log
     setProfileName(name);
     setProfileImage(image);
   };
 
+  const value = {
+    profileName,
+    profileImage,
+    updateProfile
+  };
+
+  console.log('ProfileProvider current state:', { profileName, profileImage }); // Debug log
+
   return (
-    <ProfileContext.Provider value={{ profileName, profileImage, updateProfile }}>
+    <ProfileContext.Provider value={value}>
       {children}
     </ProfileContext.Provider>
   );
