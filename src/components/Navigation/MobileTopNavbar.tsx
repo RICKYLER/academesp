@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Bell, Menu, X, MessageCircle, Users, Home, User, Plus } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useProfile } from '../../contexts/ProfileContext';
@@ -25,6 +25,29 @@ const MobileTopNavbar: React.FC = () => {
     { path: '/bookmarks', label: 'Saved Posts' },
     { path: '/settings', label: 'Settings' },
   ];
+
+  // Add bottom padding to body for mobile bottom navigation
+  useEffect(() => {
+    if (window.innerWidth < 768) {
+      document.body.style.paddingBottom = '70px';
+    } else {
+      document.body.style.paddingBottom = '0';
+    }
+
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        document.body.style.paddingBottom = '70px';
+      } else {
+        document.body.style.paddingBottom = '0';
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      document.body.style.paddingBottom = '0';
+    };
+  }, []);
 
   return (
     <>
@@ -86,18 +109,6 @@ const MobileTopNavbar: React.FC = () => {
           ))}
         </div>
       </div>
-
-      {/* Add bottom padding to main content to account for fixed bottom nav */}
-      <style jsx global>{`
-        body {
-          padding-bottom: 70px;
-        }
-        @media (min-width: 768px) {
-          body {
-            padding-bottom: 0;
-          }
-        }
-      `}</style>
 
       {/* Mobile Menu Overlay */}
       {isMenuOpen && (
