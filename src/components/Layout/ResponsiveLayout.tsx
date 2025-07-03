@@ -9,7 +9,7 @@ import SponsoredAds from '../Ads/SponsoredAds';
 
 const ResponsiveLayout: React.FC = () => {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-800 transition-colors duration-300">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50/30 dark:from-gray-900 dark:via-gray-800 dark:to-blue-900/20 transition-all duration-500">
       <ResponsiveNavbar />
       
       <div className="flex">
@@ -20,16 +20,25 @@ const ResponsiveLayout: React.FC = () => {
         
         {/* Main Content */}
         <main className="flex-1 p-3 md:p-6 pb-20 md:pb-6">
-          <div className="max-w-2xl mx-auto">
-            <FeaturedProducts />
-            <NewsFeed />
+          <div className="max-w-2xl mx-auto space-y-6">
+            {/* Enhanced content container */}
+            <div className="bg-white/70 dark:bg-gray-900/70 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50 shadow-lg p-1">
+              <FeaturedProducts />
+            </div>
+            <div className="bg-white/70 dark:bg-gray-900/70 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50 shadow-lg p-1">
+              <NewsFeed />
+            </div>
           </div>
         </main>
         
         {/* Right Sidebar - Hidden on mobile and tablet */}
         <aside className="hidden xl:block w-80 p-6 space-y-6">
-          <PerformancePanel />
-          <SponsoredAds />
+          <div className="bg-white/70 dark:bg-gray-900/70 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50 shadow-lg p-1">
+            <PerformancePanel />
+          </div>
+          <div className="bg-white/70 dark:bg-gray-900/70 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50 shadow-lg p-1">
+            <SponsoredAds />
+          </div>
         </aside>
       </div>
     </div>
