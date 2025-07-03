@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Send, Search, MoreVertical, Phone, Video, Info, Smile, Paperclip, ArrowLeft, Plus } from 'lucide-react';
+import { Send, Search, MoreVertical, Phone, Video, Info, Smile, Paperclip, ArrowLeft, Plus, Star, Archive, Bell, BellOff } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { ScrollArea } from '../ui/scroll-area';
@@ -183,67 +183,87 @@ const MessagesContent: React.FC = () => {
         participantAvatar={selectedConv?.avatar || ''}
       />
 
-      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden h-[calc(100vh-140px)]">
+      <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden h-[calc(100vh-140px)] animate-fade-in">
         <div className="flex h-full">
-          {/* Conversations List - Desktop always visible, Mobile conditionally hidden */}
-          <div className={`w-full md:w-80 border-r border-gray-200 dark:border-gray-700 flex flex-col bg-gray-50 dark:bg-gray-800/50 ${showMobileChat ? 'hidden md:flex' : 'flex'}`}>
-            {/* Header with enhanced styling */}
-            <div className="p-6 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
-                  <span className="text-white text-sm font-semibold">M</span>
-                </div>
-                Messages
-              </h2>
+          {/* Enhanced Conversations List */}
+          <div className={`w-full md:w-80 border-r border-gray-200/50 dark:border-gray-700/50 flex flex-col bg-gradient-to-b from-gray-50/50 via-blue-50/20 to-purple-50/20 dark:from-gray-800/50 dark:via-blue-900/10 dark:to-purple-900/10 ${showMobileChat ? 'hidden md:flex' : 'flex'}`}>
+            {/* Enhanced Header */}
+            <div className="p-6 border-b border-gray-200/50 dark:border-gray-700/50 bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-2xl bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center shadow-lg">
+                    <span className="text-white text-sm font-bold">M</span>
+                  </div>
+                  Messages
+                </h2>
+                <Button variant="ghost" size="icon" className="rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20">
+                  <Plus className="w-5 h-5 text-blue-600" />
+                </Button>
+              </div>
+              
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                 <Input
                   placeholder="Search conversations..."
-                  className="pl-10 bg-gray-50 dark:bg-gray-800 border-0 focus:ring-2 focus:ring-blue-500 rounded-xl"
+                  className="pl-10 bg-white/80 dark:bg-gray-800/80 border-gray-200/50 dark:border-gray-600/50 focus:ring-2 focus:ring-blue-500/50 rounded-xl backdrop-blur-sm transition-all"
                 />
               </div>
             </div>
 
-            {/* Conversations with enhanced design */}
+            {/* Enhanced Conversations with animations */}
             <ScrollArea className="flex-1">
               <div className="p-3 space-y-2">
-                {conversations.map((conversation) => (
+                {conversations.map((conversation, index) => (
                   <div
                     key={conversation.id}
                     onClick={() => handleConversationSelect(conversation.id)}
-                    className={`p-4 rounded-xl cursor-pointer transition-all duration-200 group relative ${
+                    className={`p-4 rounded-2xl cursor-pointer transition-all duration-300 group relative overflow-hidden animate-fade-in hover:scale-[1.02] ${
                       selectedConversation === conversation.id
-                        ? 'bg-white dark:bg-gray-900 shadow-lg border border-blue-200 dark:border-blue-800 transform scale-[1.02]'
-                        : 'hover:bg-white/70 dark:hover:bg-gray-700/50 hover:shadow-md'
+                        ? 'bg-white/90 dark:bg-gray-900/90 shadow-xl border border-blue-200/50 dark:border-blue-800/50 transform scale-[1.02] backdrop-blur-lg'
+                        : 'hover:bg-white/60 dark:hover:bg-gray-800/60 hover:shadow-lg backdrop-blur-sm'
                     }`}
+                    style={{ 
+                      animationDelay: `${index * 0.1}s`,
+                      background: selectedConversation === conversation.id 
+                        ? 'linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(248,250,252,0.8) 100%)' 
+                        : undefined
+                    }}
                   >
-                    <div className="flex items-start space-x-3">
+                    {/* Subtle gradient overlay for selected item */}
+                    {selectedConversation === conversation.id && (
+                      <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5 rounded-2xl"></div>
+                    )}
+                    
+                    <div className="flex items-start space-x-3 relative z-10">
                       <div className="relative">
-                        <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-400 to-purple-500 flex items-center justify-center text-white text-sm font-semibold shadow-lg">
+                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 flex items-center justify-center text-white text-sm font-bold shadow-lg hover:shadow-xl transition-shadow">
                           {conversation.avatar}
                         </div>
                         {conversation.isOnline && (
-                          <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white dark:border-gray-900"></div>
+                          <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-3 border-white dark:border-gray-900 shadow-lg animate-pulse"></div>
                         )}
                       </div>
+                      
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between mb-1">
-                          <h3 className="font-semibold text-gray-900 dark:text-white text-sm truncate">
+                          <h3 className="font-semibold text-gray-900 dark:text-white text-sm truncate group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                             {conversation.name}
                           </h3>
-                          <span className="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
-                            {conversation.timestamp}
-                          </span>
+                          <div className="flex items-center space-x-2">
+                            <span className="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
+                              {conversation.timestamp}
+                            </span>
+                            {conversation.unread > 0 && (
+                              <Badge className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white min-w-[20px] h-5 text-xs rounded-full flex items-center justify-center shadow-lg animate-pulse">
+                                {conversation.unread}
+                              </Badge>
+                            )}
+                          </div>
                         </div>
-                        <p className="text-sm text-gray-600 dark:text-gray-300 truncate">
+                        <p className="text-sm text-gray-600 dark:text-gray-300 truncate leading-relaxed">
                           {conversation.lastMessage}
                         </p>
                       </div>
-                      {conversation.unread > 0 && (
-                        <Badge className="bg-blue-500 hover:bg-blue-600 text-white min-w-[20px] h-5 text-xs rounded-full flex items-center justify-center">
-                          {conversation.unread}
-                        </Badge>
-                      )}
                     </div>
                   </div>
                 ))}
@@ -251,64 +271,70 @@ const MessagesContent: React.FC = () => {
             </ScrollArea>
           </div>
 
-          {/* Chat Area - Enhanced design */}
+          {/* Enhanced Chat Area */}
           <div className={`flex-1 flex flex-col ${!showMobileChat ? 'hidden md:flex' : 'flex'}`}>
             {selectedConversation && selectedConv ? (
               <>
-                {/* Enhanced Chat Header */}
-                <div className="p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
+                {/* Enhanced Chat Header with gradient */}
+                <div className="p-4 border-b border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-r from-white/80 via-blue-50/30 to-purple-50/30 dark:from-gray-900/80 dark:via-blue-900/10 dark:to-purple-900/10 backdrop-blur-sm flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="md:hidden"
+                      className="md:hidden rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20"
                       onClick={handleBackToList}
                     >
                       <ArrowLeft className="w-5 h-5" />
                     </Button>
+                    
                     <div className="relative">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-400 to-purple-500 flex items-center justify-center text-white text-sm font-semibold">
+                      <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 flex items-center justify-center text-white text-sm font-bold shadow-lg">
                         {selectedConv.avatar}
                       </div>
                       {selectedConv.isOnline && (
-                        <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white dark:border-gray-900"></div>
+                        <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white dark:border-gray-900 shadow-md animate-pulse"></div>
                       )}
                     </div>
+                    
                     <div>
-                      <h3 className="font-semibold text-gray-900 dark:text-white text-lg">
+                      <h3 className="font-bold text-gray-900 dark:text-white text-lg">
                         {selectedConv.name}
                       </h3>
-                      <p className="text-sm text-green-500 font-medium">
-                        {selectedConv.isOnline ? 'Online' : 'Last seen recently'}
-                      </p>
+                      <div className="flex items-center space-x-2">
+                        <div className={`w-2 h-2 rounded-full ${selectedConv.isOnline ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`}></div>
+                        <p className={`text-sm font-medium ${selectedConv.isOnline ? 'text-green-600 dark:text-green-400' : 'text-gray-500'}`}>
+                          {selectedConv.isOnline ? 'Active now' : 'Last seen recently'}
+                        </p>
+                      </div>
                     </div>
                   </div>
+                  
                   <div className="flex items-center space-x-2">
                     <Button 
                       variant="ghost" 
                       size="icon" 
-                      className="rounded-full hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                      className="rounded-full hover:bg-green-50 dark:hover:bg-green-900/20 hover:scale-110 transition-all"
                       onClick={handleVoiceCall}
                     >
-                      <Phone className="w-5 h-5 text-blue-600" />
+                      <Phone className="w-5 h-5 text-green-600" />
                     </Button>
                     <Button 
                       variant="ghost" 
                       size="icon" 
-                      className="rounded-full hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                      className="rounded-full hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:scale-110 transition-all"
                       onClick={handleVideoCall}
                     >
                       <Video className="w-5 h-5 text-blue-600" />
                     </Button>
-                    <Button variant="ghost" size="icon" className="rounded-full hover:bg-gray-50 dark:hover:bg-gray-800">
-                      <Info className="w-5 h-5" />
+                    <Button variant="ghost" size="icon" className="rounded-full hover:bg-gray-50 dark:hover:bg-gray-800 hover:scale-110 transition-all">
+                      <Info className="w-5 h-5 text-gray-600" />
                     </Button>
                   </div>
                 </div>
 
-                {/* File Attachment Panel */}
+                {/* Enhanced File Attachment Panel */}
                 {showFileAttachment && (
-                  <div className="p-4 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+                  <div className="p-4 bg-gradient-to-r from-gray-50/80 to-blue-50/40 dark:from-gray-800/80 dark:to-blue-900/20 border-b border-gray-200/50 dark:border-gray-700/50 backdrop-blur-sm animate-fade-in">
                     <FileAttachment
                       onFileSelect={handleFileSelect}
                       attachedFiles={attachedFiles}
@@ -317,30 +343,31 @@ const MessagesContent: React.FC = () => {
                   </div>
                 )}
 
-                {/* Enhanced Messages Area */}
-                <ScrollArea className="flex-1 p-6 bg-gradient-to-b from-gray-50/50 to-white dark:from-gray-800/50 dark:to-gray-900">
+                {/* Enhanced Messages Area with better gradients */}
+                <ScrollArea className="flex-1 p-6 bg-gradient-to-br from-gray-50/30 via-blue-50/10 to-purple-50/10 dark:from-gray-800/30 dark:via-blue-900/5 dark:to-purple-900/5">
                   <div className="space-y-6">
-                    {messages.map((message) => (
+                    {messages.map((message, index) => (
                       <div
                         key={message.id}
-                        className={`flex ${message.isMe ? 'justify-end' : 'justify-start'}`}
+                        className={`flex ${message.isMe ? 'justify-end' : 'justify-start'} animate-fade-in`}
+                        style={{ animationDelay: `${index * 0.1}s` }}
                       >
                         <div className={`max-w-xs lg:max-w-md relative group ${message.isMe ? 'order-2' : 'order-1'}`}>
                           <div
-                            className={`px-4 py-3 rounded-2xl shadow-sm ${
+                            className={`px-5 py-3 rounded-2xl shadow-lg backdrop-blur-sm transition-all duration-200 hover:shadow-xl ${
                               message.isMe
-                                ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-br-md'
-                                : 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-bl-md'
+                                ? 'bg-gradient-to-r from-blue-500 via-blue-600 to-purple-600 text-white rounded-br-md transform hover:scale-[1.02]'
+                                : 'bg-white/90 dark:bg-gray-800/90 text-gray-900 dark:text-white border border-gray-200/50 dark:border-gray-700/30 rounded-bl-md hover:bg-white dark:hover:bg-gray-800'
                             }`}
                           >
                             <p className="text-sm leading-relaxed">{message.content}</p>
                           </div>
-                          <div className={`flex items-center mt-1 space-x-1 ${message.isMe ? 'justify-end' : 'justify-start'}`}>
-                            <span className="text-xs text-gray-500 dark:text-gray-400">
+                          <div className={`flex items-center mt-2 space-x-2 ${message.isMe ? 'justify-end' : 'justify-start'}`}>
+                            <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">
                               {message.timestamp}
                             </span>
                             {message.isMe && message.status && (
-                              <div className={`text-xs ${
+                              <div className={`text-xs font-medium ${
                                 message.status === 'read' ? 'text-blue-500' :
                                 message.status === 'delivered' ? 'text-gray-400' : 'text-gray-300'
                               }`}>
@@ -354,30 +381,31 @@ const MessagesContent: React.FC = () => {
                   </div>
                 </ScrollArea>
 
-                {/* Enhanced Message Input */}
-                <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+                {/* Enhanced Message Input with better styling */}
+                <div className="p-4 border-t border-gray-200/50 dark:border-gray-700/50 bg-gradient-to-r from-white/80 via-blue-50/30 to-purple-50/30 dark:from-gray-900/80 dark:via-blue-900/10 dark:to-purple-900/10 backdrop-blur-sm">
                   <div className="flex items-center space-x-3">
                     <Button 
                       variant="ghost" 
                       size="icon" 
-                      className="rounded-full text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                      className="rounded-full text-gray-500 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:scale-110 transition-all"
                       onClick={() => setShowFileAttachment(!showFileAttachment)}
                     >
                       <Paperclip className="w-5 h-5" />
                     </Button>
+                    
                     <div className="flex-1 relative">
                       <Input
                         placeholder="Type a message..."
                         value={newMessage}
                         onChange={(e) => setNewMessage(e.target.value)}
                         onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                        className="pr-12 rounded-full border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="pr-12 rounded-2xl border-gray-300/50 dark:border-gray-600/50 focus:ring-2 focus:ring-blue-500/50 focus:border-transparent bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm transition-all shadow-sm hover:shadow-md"
                       />
-                      <div className="absolute right-2 top-1/2 transform -translate-y-1/2">
+                      <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="rounded-full text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                          className="rounded-full text-gray-500 hover:text-yellow-600 dark:hover:text-yellow-400 hover:bg-yellow-50 dark:hover:bg-yellow-900/20 hover:scale-110 transition-all"
                           onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                         >
                           <Smile className="w-5 h-5" />
@@ -389,23 +417,24 @@ const MessagesContent: React.FC = () => {
                         />
                       </div>
                     </div>
+                    
                     <Button 
                       onClick={handleSendMessage} 
                       size="icon"
-                      className="rounded-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 shadow-lg"
+                      className="rounded-full bg-gradient-to-r from-blue-500 via-blue-600 to-purple-600 hover:from-blue-600 hover:via-blue-700 hover:to-purple-700 shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-200"
                     >
-                      <Send className="w-4 h-4" />
+                      <Send className="w-5 h-5" />
                     </Button>
                   </div>
                 </div>
               </>
             ) : (
-              <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900">
-                <div className="text-center text-gray-500 dark:text-gray-400 max-w-md">
-                  <div className="w-20 h-20 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/20 dark:to-purple-900/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <Send className="w-10 h-10 text-blue-500" />
+              <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-gray-50/50 via-blue-50/20 to-purple-50/20 dark:from-gray-800/50 dark:via-blue-900/10 dark:to-purple-900/10">
+                <div className="text-center text-gray-500 dark:text-gray-400 max-w-md animate-fade-in">
+                  <div className="w-24 h-24 bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100 dark:from-blue-900/20 dark:via-purple-900/20 dark:to-pink-900/20 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+                    <Send className="w-12 h-12 text-blue-500" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-3 text-gray-900 dark:text-white">Welcome to Messages</h3>
+                  <h3 className="text-2xl font-bold mb-3 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Welcome to Messages</h3>
                   <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
                     Select a conversation from the sidebar to start messaging with your classmates and study groups.
                   </p>
